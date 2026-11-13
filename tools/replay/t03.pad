@@ -1,0 +1,79 @@
+# T03 replay script (Alien tutorial: eggs, face hugger, chest burst, Praetorian, Queen, upgrade menu, hive nodes, gather).
+# Plays all 20 goals; the last (gather) completes at frame ~8815, run 9000 frames. B+n = pad polls after the briefing, frame ~ B+n+845.
+# Model as t04.pad: LS pans the camera (ramps with hold time: 0.0113 t^2 up to 38 polls, then ~0.9 per poll), the cursor sits at the
+# screen centre, ground point (cam x, cam y - 21.4); ldown raises y, lup lowers it. Goals gate on game time, keep the gaps.
+# A modifier (LT/RT) must be held a few polls BEFORE the button, else it is ignored: chord first, then the modifier line
+# (the event list is first-match-wins).
+# close the mission briefing
+B+60 start
+# skip the intro movie
+B+150 a
+# g0 select the Egg at (162.6,64.4): the cursor starts on it
+B+250 a
+# g1 Black hatches a Face Hugger
+B+330 black
+# g2 move the hugger onto the Kurn at (141,69): camera left 23, up 4.5, then B (face hug -> chest burst -> Runner, g2..g4)
+B+400 lleft:45
+B+470 ldown:20
+B+520 b
+# g5 scroll to the marked area (97,96): only counts once g5 is active (frame ~2400)
+B+1500 lleft:68
+B+1600 ldown:50
+B+1700 ldown:9
+B+1800 lup:8
+# g6 select the Egg at (96,97)
+B+1900 a
+# g7 LT held, then Black: the Egg becomes a Praetorian Egg
+B+2010 lt+black:8
+B+2000 lt:30
+# g8 Black hatches the Praetorian Facehugger
+B+2200 black
+# g9 cursor to the Kurn at (83,87), B: the Praetorian hugger kills it, a Praetorian emerges at (84.6,85.3)
+B+2300 lleft:34
+B+2380 lup:30
+B+2450 b
+# g10 select the Praetorian (it appears ~frame 4300), Black turns it into a Queen
+B+3400 lup:13
+B+3450 lright:9
+B+3550 a
+B+3650 black
+# g11 LT held, then Black: egg sack
+B+4310 lt+black:8
+B+4300 lt:30
+# g12 Black opens the upgrade menu; g13 right, down, down, right (Queen's Upgrade button), A (No), left (Yes), A
+B+4500 black
+B+4620 right
+B+4680 down
+B+4740 down
+B+4800 right
+B+4860 a
+B+4920 left
+B+4980 a
+# g14 Black closes the menu
+B+5100 black
+# g15 select the Drone at (79.6,94.4)
+B+5300 lleft:21
+B+5350 ldown:29
+B+5420 a
+# g16 Black makes a hive node; nodes need ~14 units between them, so walk the drone 15 units west twice (4 nodes in all)
+B+5500 black
+B+5620 lleft:36
+B+5700 b
+B+6000 black
+B+6120 lleft:36
+B+6200 b
+B+6500 black
+# g17 drone to (42,81)
+B+6650 lleft:28
+B+6720 lup:35
+B+6800 b
+# g18 gather: the trigger wants the drone near the Queen (field +0x48C) and the gather point (+0x47C) at the corpses (42,81).
+# Walk the drone back to the Queen, put the cursor back on the corpses, RT held then Y (focus Gather) and A
+B+7500 lright:68
+B+7620 ldown:20
+B+7700 b
+B+7760 lleft:68
+B+7880 lup:20
+B+8000 rt+a:8
+B+7970 rt+y:8
+B+7960 rt:70

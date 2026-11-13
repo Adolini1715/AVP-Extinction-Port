@@ -1,0 +1,46 @@
+a 0 29C          # exactly the tail (last block of the segment)
+a 1 11
+a 2 11
+a 3 11
+a 4 11
+a F 2            # guard: keeps block 4 away from the tail
+f 2
+a 2 11           # the exact list
+f 2
+f 4
+a 4 11           # exact list, another block still on it
+a 2 11
+f 2
+a 2 10           # one unit left over
+a 5 92
+a 6 2
+a 7 202
+a 8 2
+f 5
+f 7
+a 9 150          # list 0: two blocks too small, then F2; the rest (0xB2) goes back into list 0
+a A FEF0
+a B FEF0
+a C 20
+a D 2
+f C
+f B
+f A
+a E 1000         # from X1; the rest and X2 together exceed one header
+
+a 10 8000
+a 11 8130
+a 12 2
+f 11
+f 10
+a 13 200         # the rest of block 10 and block 11 together exceed 0xFF00 units
+raw va=145432 TAG poke=[30BEB4]+14:0 arg=*30BEB4 arg=0 arg=1000000
+raw va=145432 TAG poke=[30BEB4]+14:2 arg=*30BEB4 arg=8 arg=30
+raw va=145432 TAG stub=1 poke=[4020]+250:@S+800 poke=@S+814:143F29 arg=*30BEB4 arg=0 arg=40
+raw va=145432 TAG poke=[4020]+250:0 arg=*30BEB4 arg=1 arg=40
+a 20 FE00
+a 21 FE00
+a 22 FE00
+a 23 FE00
+a 24 FE00
+a 25 800

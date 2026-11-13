@@ -1,0 +1,44 @@
+# T01 replay script (basic controls). B+n = pad polls after the briefing went up (~1 poll per frame afterwards).
+# The pointer is the screen centre: "cursor over X" = the camera look point (left stick) on X.
+# Left stick scroll ramps up with the hold time (0.1/frame at first, ~0.9/frame after 60 polls); the
+# right stick moves the minimap cursor (3.45 map units per poll, world = 1.5 * map); the camera
+# clamps at the map edge (x<=194, y<=141). Timings below were tuned with a live sampler
+# (verified: every step completes, all three drones die, ~frame 5100 of the run).
+B+60 start                 # close the briefing
+B+150 a
+# step 1: scroll the camera to the highlighted area (159,128), r=7: sweep right then down through it
+B+200 lright:186
+B+406 ldown:200
+# step 2: minimap cursor to (14,36) r=12 (map units /1.5), then A to jump there; marines appear
+B+700 rleft:40             # clamp the minimap cursor at x=0
+B+760 rup:40               # ... and y=0
+B+820 rdown:7              # y -> 24
+B+850 rright:3             # x -> 10
+B+900 a
+# step 3: camera onto the nearby Marine (17.2,34.7)
+B+1000 lright:11
+B+1040 lup:13
+# step 4: select him; step 5: hold A so the growing circle takes all three Marines
+B+1150 a:6
+B+1300 a:40
+# step 6: scroll to the highlighted area (100,27) and order the move with B (the marines walk ~1000 frames)
+B+1500 lright+lup:22
+B+1522 lright:90
+B+1700 b:5
+# step 7: cursor over the first Drone (102,24), B to attack
+B+2750 lright+lup:14
+B+2764 lup:8
+B+2850 lright:11
+B+2950 b:5
+# step 8: finish the remaining Drones (102,22) and (100,22)
+B+3750 lup:13
+B+3850 b:5
+B+4050 lleft:13
+B+4150 b:5
+# the last goal is done at ~B+4350 (frame ~5250); A ends the tutorial. Do not leave a briefing for last:
+# every briefing is a modal loop (frames stop, polls go on) that only START closes.
+B+4400 a:5
+# the end screen (MainMenuMarineEnd) waits for a button: START; T02 loads and its briefing (modal) goes up
+# ~60 polls later; a second START closes it.
+B+4500 start:5
+B+4650 start:5

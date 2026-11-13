@@ -1,0 +1,94 @@
+[
+ {
+  "start": "0x00020380",
+  "note": "constant in push at 0x0001FCBF"
+ },
+ {
+  "start": "0x00026220",
+  "note": "constant in mov at 0x0002602B"
+ },
+ {
+  "start": "0x0004DAD0",
+  "note": "constant in mov at 0x0004D6BB"
+ },
+ {
+  "start": "0x0004F220",
+  "note": "constant in mov at 0x0004F127"
+ },
+ {
+  "start": "0x0004F700",
+  "note": "constant in mov at 0x0004F146"
+ },
+ {
+  "start": "0x00058260",
+  "note": "constant in push at 0x00058025"
+ },
+ {
+  "start": "0x0005C250",
+  "note": "constant in push at 0x0005BBD7"
+ },
+ {
+  "start": "0x0005C560",
+  "note": "constant in push at 0x0005BE05"
+ },
+ {
+  "start": "0x000637F0",
+  "note": "constant in push at 0x000637D2"
+ },
+ {
+  "start": "0x0007C890",
+  "note": "constant in push at 0x0007B074"
+ },
+ {
+  "start": "0x0007CDF0",
+  "note": "constant in mov at 0x0007B099"
+ },
+ {
+  "start": "0x0007D150",
+  "note": "constant in push at 0x0007B0B2"
+ },
+ {
+  "start": "0x0007D240",
+  "note": "constant in mov at 0x0007B01D"
+ },
+ {
+  "start": "0x00095F70",
+  "note": "constant in push at 0x00094BC0"
+ },
+ {
+  "start": "0x000E8300",
+  "note": "constant in push at 0x000E6F5C"
+ },
+ {
+  "start": "0x000E8310",
+  "note": "constant in push at 0x000E6F42"
+ },
+ {
+  "start": "0x000E8320",
+  "note": "constant in push at 0x000E6F28"
+ },
+ {
+  "start": "0x000E8330",
+  "note": "constant in push at 0x000E6F0F"
+ },
+ {
+  "start": "0x000E8340",
+  "note": "constant in push at 0x000E6EF5"
+ },
+ {
+  "start": "0x001706E0",
+  "note": "constant in push at 0x0016E70A"
+ },
+ {
+  "start": "0x001706F0",
+  "note": "constant in push at 0x0016E72A"
+ },
+ {
+  "start": "0x00170700",
+  "note": "constant in push at 0x00026E3A"
+ },
+ {
+  "start": "0x00170A50",
+  "note": "constant in push at 0x0016FAAB"
+ }
+]

@@ -1,0 +1,27 @@
+[
+ {
+  "start": "0x000E1007",
+  "owner": "0x000E0FF0",
+  "why": "CSoundDefinition constructor split by a coincidental constant in DSOUND data; the je after the split lost its flags and every registration cleared the sound table (no sounds at all)"
+ },
+ {
+  "start": "0x0008000E",
+  "owner": "0x00080008",
+  "why": "nop padding between GUnitMover::MoveTo(HGOBJECT) 0x7FFF0 (ends 0x80004) and TurnTo 0x80010, split in two by the function finder; not code. 0x80008 is merged into 0x7FFF0 below (false_starts.py accepts a padding gap)"
+ },
+ {
+  "start": "0x00080008",
+  "owner": "0x0007FFF0",
+  "why": "nop padding after GUnitMover::MoveTo(const CVector &) 0x7FFF0 (ends 0x80004) up to TurnTo 0x80010 (0x8000E already merged into it); not code"
+ },
+ {
+  "start": "0x0001C1AA",
+  "owner": "0x0001C110",
+  "why": "nop padding after 0x1C110 (ends 0x1C1A5) up to 0x1C1B0; an immediate reference target, not code"
+ },
+ {
+  "start": "0x0007D000",
+  "owner": "0x0007CFF0",
+  "why": "GNPCAI::MigrateToEggState 0x7CFF0 split at its fadd by a data word equal to 0x7D000 (notes/NPCAI.md); the fstp after it lost the loaded value"
+ }
+]

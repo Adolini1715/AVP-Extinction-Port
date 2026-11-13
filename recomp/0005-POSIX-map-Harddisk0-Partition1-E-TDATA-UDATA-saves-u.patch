@@ -1,0 +1,31 @@
+From c187d23c84b39d1a6425be90f6d1d949b363bc7e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 14 Oct 2026 21:08:06 -0500
+Subject: [PATCH] POSIX: map Harddisk0 Partition1 (E:, TDATA/UDATA saves) under
+ the save dir
+
+It was mapped into the game dir, so a title's saves were written next to the
+disc image.
+---
+ src/kernel/kernel_path.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/kernel/kernel_path.c b/src/kernel/kernel_path.c
+index c06a011..1373ae3 100644
+--- a/src/kernel/kernel_path.c
++++ b/src/kernel/kernel_path.c
+@@ -47,7 +47,10 @@ typedef struct {
+ 
+ static const path_rule s_rules[] = {
+     { "\\Device\\CdRom0\\",                   0, NULL,         NULL          },
+-    { "\\Device\\Harddisk0\\Partition1\\",    0, NULL,         NULL          },
++    /* Partition1 is E:, where titles keep TDATA (title data) and UDATA
++     * (saves). It is written to, so it belongs under the save dir, not in
++     * the game dir next to the disc image. */
++    { "\\Device\\Harddisk0\\Partition1\\",    1, "\\E",       "/E"          },
+     /* The rest of the disk. Partition 0 is the whole raw device, 2 holds
+      * system data, and 3-5 are the per-title caches behind X:, Y: and Z:.
+      * Without these the path layer reported "Unrecognized Xbox path" and
+-- 
+2.43.0
+

@@ -1,0 +1,78 @@
+# T05 replay script (Predator tutorial: Shrine menu, upgrades, skull, gather, cloak, ambush, heal, Thermal Vision, scroll).
+# Plays all 24 goals; g22 (scroll) done by frame ~5980, the last goal (g23, a ~600 frame message timer) ends at ~6580.
+# Pad polls, B+n = n polls after the briefing; frame is about B+n+844. Model as t04.pad: LS pans the camera, the cursor sits
+# at the screen centre, ground point (cam x, cam y - 21.4); ldown raises y, lup lowers it. Goals gate on game time, keep gaps.
+# Menus are rebuilt on every open: an upgrade is only offered if it was enabled BEFORE the menu opened.
+# close the mission briefing
+B+60 start
+# skip the intro movie
+B+150 a
+# g0 select the Shrine (cursor starts on it)
+B+250 a
+# g1 Black opens the Shrine menu
+B+330 black
+# g2 order Predators (A, A) and confirm with X
+B+420 a
+B+470 a
+B+540 x
+# g3/g4 reselect the Shrine, reopen the menu
+B+600 a
+B+680 black
+# g5 upgrade the Brawler: right, A ("No"), left ("Yes"), A
+B+760 right
+B+840 a
+B+920 left
+B+1000 a
+# g6 Black exits the menu
+B+1080 black
+# g7 select the Predator Gun at (105,80)
+B+1100 lright:20
+B+1140 ldown:15
+B+1190 a
+# g8 Black deploys it
+B+1250 black
+# g9 select the Blooded SpearMaster at (103,48)
+B+1310 lleft:13
+B+1350 lup:56
+B+1450 a
+# g10 kill the Marine at (115,48): B on the hovered Marine
+B+1500 lright:33
+B+1560 b
+# g11/g12 acquire the skull: corpse hover window is pointer y in [47.1,48.4] at x=115.56
+B+1790 ldown:8
+B+1840 b
+# g13 hold RT and press Y (focus Gather), then A with RT held (places the gather order)
+B+2110 rt+y:8
+B+2118 rt+a:8
+# g14 Black cloaks the predator
+B+2200 black
+# g15 ambush the two Marines at (100,22): pan the cursor onto them, B attacks
+B+2300 lleft:37
+B+2360 lup:48
+B+2520 b
+# g16 walk back to the Shrine (within 4 of (100.6,77.4)): pan down, B moves
+B+2950 ldown:80
+B+3070 b
+# g17 stand until energy is full (wait ~720 frames)
+# g18 hold LT, Black (focus heal), A
+B+4150 lt:10
+B+4160 lt+black:8
+B+4168 lt+a:8
+# g19 select the Shrine (cursor onto it), Black opens the menu
+B+4320 lright:1
+B+4350 ldown:15
+B+4400 a
+B+4450 black
+# g20 Thermal Vision: close and reopen the menu so the upgrade is offered, right, down (Thermal), A, left (Yes), A
+B+4520 black
+B+4590 black
+B+4650 right
+B+4700 down
+B+4750 a
+B+4800 left
+B+4850 a
+# g21 Black exits the menu
+B+4920 black
+# g22 scroll the camera to the marked position (32,126) within LookRadius 7
+B+4960 lleft+ldown:75
+B+5060 lleft:42

@@ -1,0 +1,2 @@
+# main thread stack: live frames differ between decompiled and lifted callers
+F70000-F7FFFF

@@ -1,0 +1,38 @@
+From 3601b16f9348f3005e8af519aa715316ffbe1d00 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 14 Oct 2026 18:27:59 -0500
+Subject: [PATCH] POSIX bring-up: RECOMP_WATCH_VA reports NtReadFile buffers
+ covering a guest address
+
+A read() lands through the kernel, so a host hardware watchpoint never sees
+file data overwrite live guest memory. Diagnostic only, off by default.
+---
+ src/kernel/kernel_bridge.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/kernel/kernel_bridge.c b/src/kernel/kernel_bridge.c
+index c65ba43..ac5f64d 100644
+--- a/src/kernel/kernel_bridge.c
++++ b/src/kernel/kernel_bridge.c
+@@ -3425,6 +3425,18 @@ static void bridge_NtReadFile(void)
+     g_eax = (uint32_t)xbox_NtReadFile(handle, NULL, NULL, NULL, &ios,
+                 XBOX_TO_NATIVE(buffer_va), length, poff);
+ 
++    /* RECOMP_WATCH_VA=<hex>: report any read whose buffer covers that guest
++     * address. A read() lands through the kernel, so a host debugger's
++     * hardware watchpoint never sees file data overwrite live guest memory. */
++    {
++        static int init; static uint32_t watch;
++        if (!init) { const char *w = getenv("RECOMP_WATCH_VA"); watch = w ? (uint32_t)strtoul(w, NULL, 16) : 0; init = 1; }
++        if (watch && watch >= buffer_va && watch - buffer_va < (uint32_t)ios.Information)
++            fprintf(stderr, "  [WATCH] NtReadFile from=0x%08X buffer=0x%08X len=%u @%lld covers 0x%08X -> %08X\n",
++                    g_xbox_kernel_caller, buffer_va, (uint32_t)ios.Information,
++                    poff ? (long long)off.QuadPart : -1LL, watch, BRIDGE_MEM32(watch & ~3u));
++    }
++
+     /* What a read actually delivered. A decoder that rejects its input cannot
+      * say whether the bytes were wrong or the read was, and the two look
+      * identical from inside the title -- the first bytes settle it. */
+-- 
+2.43.0
+

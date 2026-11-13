@@ -1,0 +1,1034 @@
+{
+"100": [
+4,
+"KeDisconnectInterrupt"
+],
+"101": [
+0,
+"KeEnterCriticalRegion"
+],
+"102": [
+0,
+"MmGlobalData"
+],
+"103": [
+0,
+"KeGetCurrentIrql"
+],
+"104": [
+0,
+"KeGetCurrentThread"
+],
+"105": [
+24,
+"KeInitializeApc"
+],
+"106": [
+4,
+"KeInitializeDeviceQueue"
+],
+"107": [
+12,
+"KeInitializeDpc"
+],
+"108": [
+12,
+"KeInitializeEvent"
+],
+"109": [
+28,
+"KeInitializeInterrupt"
+],
+"110": [
+8,
+"KeInitializeMutant"
+],
+"111": [
+8,
+"KeInitializeQueue"
+],
+"112": [
+12,
+"KeInitializeSemaphore"
+],
+"113": [
+8,
+"KeInitializeTimerEx"
+],
+"114": [
+12,
+"KeInsertByKeyDeviceQueue"
+],
+"115": [
+8,
+"KeInsertDeviceQueue"
+],
+"116": [
+8,
+"KeInsertHeadQueue"
+],
+"117": [
+8,
+"KeInsertQueue"
+],
+"118": [
+16,
+"KeInsertQueueApc"
+],
+"119": [
+12,
+"KeInsertQueueDpc"
+],
+"120": [
+0,
+"KeInterruptTime"
+],
+"121": [
+0,
+"KeIsExecutingDpc"
+],
+"122": [
+0,
+"KeLeaveCriticalRegion"
+],
+"123": [
+12,
+"KePulseEvent"
+],
+"124": [
+4,
+"KeQueryBasePriorityThread"
+],
+"125": [
+0,
+"KeQueryInterruptTime"
+],
+"126": [
+0,
+"KeQueryPerformanceCounter"
+],
+"127": [
+0,
+"KeQueryPerformanceFrequency"
+],
+"128": [
+4,
+"KeQuerySystemTime"
+],
+"129": [
+0,
+"KeRaiseIrqlToDpcLevel"
+],
+"130": [
+0,
+"KeRaiseIrqlToSynchLevel"
+],
+"131": [
+16,
+"KeReleaseMutant"
+],
+"132": [
+16,
+"KeReleaseSemaphore"
+],
+"133": [
+8,
+"KeRemoveByKeyDeviceQueue"
+],
+"134": [
+4,
+"KeRemoveDeviceQueue"
+],
+"135": [
+8,
+"KeRemoveEntryDeviceQueue"
+],
+"136": [
+4,
+"KeRemoveQueue"
+],
+"137": [
+4,
+"KeRemoveQueueDpc"
+],
+"138": [
+4,
+"KeResetEvent"
+],
+"139": [
+4,
+"KeRestoreFloatingPointState"
+],
+"140": [
+4,
+"KeResumeThread"
+],
+"141": [
+4,
+"KeRundownQueue"
+],
+"142": [
+4,
+"KeSaveFloatingPointState"
+],
+"143": [
+8,
+"KeSetBasePriorityThread"
+],
+"144": [
+8,
+"KeSetDisableBoostThread"
+],
+"145": [
+12,
+"KeSetEvent"
+],
+"146": [
+8,
+"KeSetEventBoostPriority"
+],
+"147": [
+8,
+"KeSetPriorityProcess"
+],
+"148": [
+8,
+"KeSetPriorityThread"
+],
+"149": [
+16,
+"KeSetTimer"
+],
+"150": [
+20,
+"KeSetTimerEx"
+],
+"151": [
+4,
+"KeStallExecutionProcessor"
+],
+"152": [
+4,
+"KeSuspendThread"
+],
+"153": [
+12,
+"KeSynchronizeExecution"
+],
+"154": [
+0,
+"KeSystemTime"
+],
+"155": [
+4,
+"KeTestAlertThread"
+],
+"158": [
+32,
+"KeWaitForMultipleObjects"
+],
+"159": [
+20,
+"KeWaitForSingleObject"
+],
+"160": [
+0,
+"KfRaiseIrql"
+],
+"161": [
+0,
+"KfLowerIrql"
+],
+"162": [
+0,
+"KiBugCheckData"
+],
+"163": [
+4,
+"KiUnlockDispatcherDatabase"
+],
+"165": [
+4,
+"MmAllocateContiguousMemory"
+],
+"166": [
+20,
+"MmAllocateContiguousMemoryEx"
+],
+"167": [
+8,
+"MmAllocateSystemMemory"
+],
+"168": [
+8,
+"MmClaimGpuInstanceMemory"
+],
+"169": [
+8,
+"MmCreateKernelStack"
+],
+"170": [
+8,
+"MmDeleteKernelStack"
+],
+"171": [
+4,
+"MmFreeContiguousMemory"
+],
+"172": [
+8,
+"MmFreeSystemMemory"
+],
+"173": [
+4,
+"MmGetPhysicalAddress"
+],
+"174": [
+4,
+"MmIsAddressValid"
+],
+"175": [
+12,
+"MmLockUnlockBufferPages"
+],
+"176": [
+8,
+"MmLockUnlockPhysicalPage"
+],
+"177": [
+12,
+"MmMapIoSpace"
+],
+"178": [
+12,
+"MmPersistContiguousMemory"
+],
+"179": [
+4,
+"MmQueryAddressProtect"
+],
+"180": [
+4,
+"MmQueryAllocationSize"
+],
+"181": [
+4,
+"MmQueryStatistics"
+],
+"182": [
+12,
+"MmSetAddressProtect"
+],
+"183": [
+8,
+"MmUnmapIoSpace"
+],
+"184": [
+20,
+"NtAllocateVirtualMemory"
+],
+"185": [
+8,
+"NtCancelTimer"
+],
+"186": [
+4,
+"NtClearEvent"
+],
+"187": [
+4,
+"NtClose"
+],
+"188": [
+8,
+"NtCreateDirectoryObject"
+],
+"189": [
+16,
+"NtCreateEvent"
+],
+"190": [
+36,
+"NtCreateFile"
+],
+"191": [
+16,
+"NtCreateIoCompletion"
+],
+"192": [
+12,
+"NtCreateMutant"
+],
+"193": [
+16,
+"NtCreateSemaphore"
+],
+"194": [
+12,
+"NtCreateTimer"
+],
+"195": [
+4,
+"NtDeleteFile"
+],
+"196": [
+40,
+"NtDeviceIoControlFile"
+],
+"197": [
+12,
+"NtDuplicateObject"
+],
+"198": [
+8,
+"NtFlushBuffersFile"
+],
+"199": [
+12,
+"NtFreeVirtualMemory"
+],
+"200": [
+40,
+"NtFsControlFile"
+],
+"201": [
+12,
+"NtOpenDirectoryObject"
+],
+"202": [
+24,
+"NtOpenFile"
+],
+"203": [
+8,
+"NtOpenSymbolicLinkObject"
+],
+"204": [
+16,
+"NtProtectVirtualMemory"
+],
+"205": [
+8,
+"NtPulseEvent"
+],
+"206": [
+20,
+"NtQueueApcThread"
+],
+"207": [
+40,
+"NtQueryDirectoryFile"
+],
+"208": [
+28,
+"NtQueryDirectoryObject"
+],
+"209": [
+16,
+"NtQueryEvent"
+],
+"210": [
+8,
+"NtQueryFullAttributesFile"
+],
+"211": [
+20,
+"NtQueryInformationFile"
+],
+"212": [
+20,
+"NtQueryIoCompletion"
+],
+"213": [
+20,
+"NtQueryMutant"
+],
+"214": [
+20,
+"NtQuerySemaphore"
+],
+"215": [
+12,
+"NtQuerySymbolicLinkObject"
+],
+"216": [
+20,
+"NtQueryTimer"
+],
+"217": [
+8,
+"NtQueryVirtualMemory"
+],
+"218": [
+20,
+"NtQueryVolumeInformationFile"
+],
+"219": [
+32,
+"NtReadFile"
+],
+"220": [
+32,
+"NtReadFileScatter"
+],
+"221": [
+8,
+"NtReleaseMutant"
+],
+"222": [
+12,
+"NtReleaseSemaphore"
+],
+"223": [
+20,
+"NtRemoveIoCompletion"
+],
+"224": [
+8,
+"NtResumeThread"
+],
+"225": [
+8,
+"NtSetEvent"
+],
+"226": [
+20,
+"NtSetInformationFile"
+],
+"227": [
+20,
+"NtSetIoCompletion"
+],
+"228": [
+8,
+"NtSetSystemTime"
+],
+"229": [
+32,
+"NtSetTimerEx"
+],
+"230": [
+20,
+"NtSignalAndWaitForSingleObjectEx"
+],
+"231": [
+8,
+"NtSuspendThread"
+],
+"232": [
+12,
+"NtUserIoApcDispatcher"
+],
+"233": [
+12,
+"NtWaitForSingleObject"
+],
+"234": [
+16,
+"NtWaitForSingleObjectEx"
+],
+"235": [
+24,
+"NtWaitForMultipleObjectsEx"
+],
+"236": [
+32,
+"NtWriteFile"
+],
+"237": [
+32,
+"NtWriteFileGather"
+],
+"238": [
+0,
+"NtYieldExecution"
+],
+"239": [
+28,
+"ObCreateObject"
+],
+"240": [
+0,
+"ObDirectoryObjectType"
+],
+"241": [
+24,
+"ObInsertObject"
+],
+"242": [
+4,
+"ObMakeTemporaryObject"
+],
+"243": [
+16,
+"ObOpenObjectByName"
+],
+"244": [
+20,
+"ObOpenObjectByPointer"
+],
+"245": [
+0,
+"ObpObjectHandleTable"
+],
+"246": [
+12,
+"ObReferenceObjectByHandle"
+],
+"247": [
+20,
+"ObReferenceObjectByName"
+],
+"248": [
+4,
+"ObReferenceObjectByPointer"
+],
+"249": [
+0,
+"ObSymbolicLinkObjectType"
+],
+"250": [
+0,
+"ObfDereferenceObject"
+],
+"251": [
+0,
+"ObfReferenceObject"
+],
+"252": [
+4,
+"PhyGetLinkState"
+],
+"253": [
+8,
+"PhyInitialize"
+],
+"254": [
+28,
+"PsCreateSystemThread"
+],
+"255": [
+40,
+"PsCreateSystemThreadEx"
+],
+"256": [
+4,
+"PsQueryStatistics"
+],
+"257": [
+8,
+"PsSetCreateThreadNotifyRoutine"
+],
+"258": [
+4,
+"PsTerminateSystemThread"
+],
+"260": [
+12,
+"RtlAnsiStringToUnicodeString"
+],
+"261": [
+8,
+"RtlAppendStringToString"
+],
+"262": [
+8,
+"RtlAppendUnicodeStringToString"
+],
+"263": [
+8,
+"RtlAppendUnicodeToString"
+],
+"264": [
+12,
+"RtlAssert"
+],
+"265": [
+4,
+"RtlCaptureContext"
+],
+"266": [
+20,
+"RtlCaptureStackBackTrace"
+],
+"267": [
+12,
+"RtlCharToInteger"
+],
+"268": [
+12,
+"RtlCompareMemory"
+],
+"269": [
+12,
+"RtlCompareMemoryUlong"
+],
+"270": [
+12,
+"RtlCompareString"
+],
+"271": [
+12,
+"RtlCompareUnicodeString"
+],
+"272": [
+8,
+"RtlCopyString"
+],
+"273": [
+8,
+"RtlCopyUnicodeString"
+],
+"274": [
+8,
+"RtlCreateUnicodeString"
+],
+"275": [
+4,
+"RtlDowncaseUnicodeChar"
+],
+"276": [
+12,
+"RtlDowncaseUnicodeString"
+],
+"277": [
+4,
+"RtlEnterCriticalSection"
+],
+"278": [
+4,
+"RtlEnterCriticalSectionAndRegion"
+],
+"279": [
+12,
+"RtlEqualString"
+],
+"280": [
+12,
+"RtlEqualUnicodeString"
+],
+"281": [
+12,
+"RtlExtendedIntegerMultiply"
+],
+"282": [
+16,
+"RtlExtendedLargeIntegerDivide"
+],
+"283": [
+16,
+"RtlExtendedMagicDivide"
+],
+"284": [
+12,
+"RtlFillMemory"
+],
+"285": [
+12,
+"RtlFillMemoryUlong"
+],
+"286": [
+4,
+"RtlFreeAnsiString"
+],
+"287": [
+4,
+"RtlFreeUnicodeString"
+],
+"288": [
+8,
+"RtlGetCallersAddress"
+],
+"289": [
+8,
+"RtlInitAnsiString"
+],
+"290": [
+8,
+"RtlInitUnicodeString"
+],
+"291": [
+4,
+"RtlInitializeCriticalSection"
+],
+"292": [
+16,
+"RtlIntegerToChar"
+],
+"293": [
+12,
+"RtlIntegerToUnicodeString"
+],
+"294": [
+4,
+"RtlLeaveCriticalSection"
+],
+"295": [
+4,
+"RtlLeaveCriticalSectionAndRegion"
+],
+"296": [
+4,
+"RtlLowerChar"
+],
+"297": [
+8,
+"RtlMapGenericMask"
+],
+"298": [
+12,
+"RtlMoveMemory"
+],
+"299": [
+20,
+"RtlMultiByteToUnicodeN"
+],
+"300": [
+12,
+"RtlMultiByteToUnicodeSize"
+],
+"301": [
+4,
+"RtlNtStatusToDosError"
+],
+"302": [
+4,
+"RtlRaiseException"
+],
+"303": [
+4,
+"RtlRaiseStatus"
+],
+"304": [
+8,
+"RtlTimeFieldsToTime"
+],
+"305": [
+8,
+"RtlTimeToTimeFields"
+],
+"306": [
+4,
+"RtlTryEnterCriticalSection"
+],
+"307": [
+4,
+"RtlUlongByteSwap"
+],
+"308": [
+12,
+"RtlUnicodeStringToAnsiString"
+],
+"309": [
+12,
+"RtlUnicodeStringToInteger"
+],
+"310": [
+20,
+"RtlUnicodeToMultiByteN"
+],
+"311": [
+12,
+"RtlUnicodeToMultiByteSize"
+],
+"312": [
+16,
+"RtlUnwind"
+],
+"313": [
+4,
+"RtlUpcaseUnicodeChar"
+],
+"314": [
+12,
+"RtlUpcaseUnicodeString"
+],
+"315": [
+20,
+"RtlUpcaseUnicodeToMultiByteN"
+],
+"316": [
+4,
+"RtlUpperChar"
+],
+"317": [
+8,
+"RtlUpperString"
+],
+"318": [
+4,
+"RtlUshortByteSwap"
+],
+"319": [
+12,
+"RtlWalkFrameChain"
+],
+"320": [
+8,
+"RtlZeroMemory"
+],
+"321": [
+0,
+"XboxEEPROMKey"
+],
+"327": [
+4,
+"XeLoadSection"
+],
+"328": [
+4,
+"XeUnloadSection"
+],
+"329": [
+12,
+"READ_PORT_BUFFER_UCHAR"
+],
+"330": [
+12,
+"READ_PORT_BUFFER_USHORT"
+],
+"331": [
+12,
+"READ_PORT_BUFFER_ULONG"
+],
+"332": [
+12,
+"WRITE_PORT_BUFFER_UCHAR"
+],
+"333": [
+12,
+"WRITE_PORT_BUFFER_USHORT"
+],
+"334": [
+12,
+"WRITE_PORT_BUFFER_ULONG"
+],
+"335": [
+4,
+"XcSHAInit"
+],
+"336": [
+12,
+"XcSHAUpdate"
+],
+"337": [
+8,
+"XcSHAFinal"
+],
+"338": [
+12,
+"XcRC4Key"
+],
+"339": [
+12,
+"XcRC4Crypt"
+],
+"340": [
+28,
+"XcHMAC"
+],
+"341": [
+12,
+"XcPKEncPublic"
+],
+"342": [
+12,
+"XcPKDecPrivate"
+],
+"343": [
+4,
+"XcPKGetKeyLen"
+],
+"344": [
+12,
+"XcVerifyPKCS1Signature"
+],
+"345": [
+20,
+"XcModExp"
+],
+"346": [
+8,
+"XcDESKeyParity"
+],
+"347": [
+12,
+"XcKeyTable"
+],
+"348": [
+20,
+"XcBlockCrypt"
+],
+"349": [
+28,
+"XcBlockCryptCBC"
+],
+"350": [
+8,
+"XcCryptService"
+],
+"351": [
+8,
+"XcUpdateCrypto"
+],
+"352": [
+12,
+"RtlRip"
+],
+"358": [
+0,
+"HalIsResetOrShutdownPending"
+],
+"359": [
+4,
+"IoMarkIrpMustComplete"
+],
+"360": [
+0,
+"HalInitiateShutdown"
+],
+"361": [
+0,
+"RtlSnprintf"
+],
+"362": [
+0,
+"RtlSprintf"
+],
+"363": [
+0,
+"RtlVsnprintf"
+],
+"364": [
+0,
+"RtlVsprintf"
+],
+"365": [
+0,
+"HalEnableSecureTrayEject"
+],
+"366": [
+4,
+"HalWriteSMCScratchRegister"
+],
+"374": [
+8,
+"MmDbgAllocateMemory"
+],
+"375": [
+8,
+"MmDbgFreeMemory"
+],
+"376": [
+0,
+"MmDbgQueryAvailablePages"
+],
+"377": [
+8,
+"MmDbgReleaseAddress"
+],
+"378": [
+8,
+"MmDbgWriteCheck"
+]
+}

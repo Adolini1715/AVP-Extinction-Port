@@ -1,0 +1,46 @@
+# Functions classgen.py does not generate (tools/symgen.py would write them,
+# but they failed verification or cannot be verified), with the reason.
+# VA        reason
+0x00147659  C runtime start-up (heap set-up in actor.cpp's range): verification differs in the heap header
+0x0014B153  C runtime start-up: verification differs in the heap and its globals
+0x0014AE9F  C runtime start-up: not called at boot, no natural call to verify it by
+0x0005AE40  twin (GHugger::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x0008CAF0  twin (GQueenAI::Attach(GPosRot *)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x0008CB20  twin (GEggSackAI::Attach(GPosRot *)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x000185E0  twin (GTaskPredator::Register(GAIPlayer *, CAITask *)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00085D00  twin (GPredatorMasterHunter::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x000864B0  twin (GPredatorHydra::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00086CE0  twin (GPredatorAncient::InitWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00086D20  twin (GPredatorAncient::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00011950  twin (GTaskAlien::Register(GAIPlayer *, CAITask *)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00020CD0  twin (GAlienDrone::SuspendWeapons(bool)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00020D00  twin (GAlienDrone::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00014920  twin (GTaskMarine::Register(GAIPlayer *, CAITask *)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x00070D00  twin (GMarineInfantry::ResumeWeapons()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x0008FCC0  twin (GSentryGun::SuspendWeapons(bool)): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x000E1050  twin (CSoundDefinition::~CSoundDefinition()): not called at boot, in the attract demo or in Marine 1, and it calls other code (a probe needs a live object)
+0x000191E0  long tail: returns through a virtual call whose callee (decompiled elsewhere) leaves a different eax (natural call: original 00000001, decompiled 0024E801)
+0x0002FE20  long tail: returns through a virtual call whose callee (decompiled elsewhere) leaves a different eax (natural call: original 02490000, decompiled 02491000)
+0x00069620  long tail: the oracle cannot run it: it reaches GPU registers (unmapped access 0xFD100410)
+0x0007AD60  long tail: returns through 0x7A040, whose eax holds x87 status bits (fnstsw) the oracle and the native build do not set alike
+0x0007F2F0  long tail: the oracle cannot run it: kernel call ordinal 160
+0x000A67F0  long tail: returns through 0x9F8A0 (Trigger.cpp, decompiled with ret_void) whose eax differs from the original (natural call: original 0, decompiled 002270A4)
+0x000DF200  long tail: the oracle cannot run it: kernel call ordinal 219
+0x00136BF0  long tail: the oracle cannot run it: kernel call ordinal 129
+0x00137DC0  long tail: the oracle cannot run it: kernel call ordinal 166
+0x001382E0  long tail: the oracle cannot run it: it reaches GPU registers (unmapped access 0xFD6813C8)
+0x0004ECC0  long tail: returns through GUnit::NotifyExit (0x3C120, Unit.cpp), whose eax differs from the original (live probe: original 00246B01, decompiled 00000001)
+0x0007C620  long tail: returns through GObjectAI::Process (0x7E270), whose eax differs from the original (live probe: original 00004000, decompiled 0)
+0x00124040  long tail: eax (a word the virtual callee stores) differs by 0x1000 from the original (natural call: C0DE4000 against C0DE5000)
+0x000DF3E0  long tail: never generate: symgen once dropped its chunk loop (a path lost; now rejected by the reachability check) and the generated code broke boot (disc-error handler at frame 4)
+0x000DAA70  long tail: a probe (scratch object) crashed the native build (the original may not have: unproven), so not generated
+0x0001C8C0  long tail: a probe (scratch object) crashed the native build (the original may not have: unproven), so not generated
+0x00086480  twin (GPredatorHydra::SuspendWeapons(bool)): not called at boot, in the attract demo or in Marine 1 (2026-10-17 run too), and it calls other code (a probe needs a live object)
+0x00022760  long tail: natural call differs in memory (0246CC58: original 02682406, decompiled 00000006)
+0x0004B7B0  long tail: the oracle cannot run it: kernel call ordinal 160
+0x0005A6F0  long tail: eax differs on its natural call (original 3F800000, decompiled 026A2000): returns through a callee whose eax differs
+0x00084940  long tail: the oracle cannot run it: kernel call ordinal 160
+0x00084B60  long tail: eax differs on its natural call (original 02699B10, decompiled 00305000): returns through a callee whose eax differs
+0x000882D0  long tail: eax differs on its natural call (original 0, decompiled 00233300): returns through a callee whose eax differs
+0x001371D0  defined in recomp manual_scan_all.c (link clash)
+0x00138FB0  defined in recomp manual_scan_all.c (link clash)

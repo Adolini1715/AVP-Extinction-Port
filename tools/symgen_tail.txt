@@ -1,0 +1,530 @@
+# The long tail: functions tools/symgen.py writes out exactly that are not
+# one of classgen.py's shapes (accessors, setters, flag tests, straight-line
+# and branching methods), each verified (a natural call or probes for every
+# path). classgen.py generates every VA listed here that symgen accepts and
+# that is not decompiled by hand or on classgen_skip.txt.
+# VA          file / name
+0x00011310  AvPObject.cpp  GAvPObject::GetViewport()
+0x000113B0  Physical.cpp  GPhysical::GetHealth()
+0x00011430  AvPObject.cpp  GAvPObject::GetAI()
+0x00011450  Object.cpp  GObject::Wakeup()
+0x00011460  Object.cpp  GObject::Asleep()
+0x00011480  Object.cpp  sub_00011480
+0x00011490  Task.cpp  GTask::ProcessTask()
+0x000114A0  Task.cpp  sub_000114A0
+0x00011A60  Alien.cpp  sub_00011A60
+0x00011D20  Alien.cpp  sub_00011D20
+0x00013C90  EmbarkCarrier.cpp  sub_00013C90
+0x00013DF0  Alien.cpp  sub_00013DF0
+0x00014030  Object.cpp  sub_00014030
+0x00014070  Object.cpp  sub_00014070
+0x00014150  Object.cpp  sub_00014150
+0x000141B0  Object.cpp  sub_000141B0
+0x000141E0  Object.cpp  sub_000141E0
+0x000141F0  Object.cpp  sub_000141F0
+0x00014200  Object.cpp  sub_00014200
+0x000142B0  Animatable.cpp  sub_000142B0
+0x00014310  Marine.cpp  GTaskGetResources::WaitingForShipment()
+0x00014B00  TaskRepair.cpp  sub_00014B00
+0x000153D0  Marine.cpp  sub_000153D0
+0x000186F0  Predator.cpp  sub_000186F0
+0x000187D0  Predator.cpp  sub_000187D0
+0x00019310  AIMakeBase.cpp  sub_00019310
+0x00019F60  Task.cpp  GTask::Register(GAIPlayer *, CAITask *)
+0x0001CC00  TaskGetResources.cpp  GTaskGetResources::HaveResources()
+0x0001CE10  TaskGetResources.cpp  GTaskGetResources::ResetNextTask()
+0x0001D740  TaskDefensePoints.cpp  GTaskDefensePoints::HaveResources()
+0x0001E390  TaskRogue.cpp  sub_0001E390
+0x0001FFF0  Alien.cpp  sub_0001FFF0
+0x00020190  Alien.cpp  sub_00020190
+0x000201E0  Alien.cpp  sub_000201E0
+0x00020230  Alien.cpp  sub_00020230
+0x00020280  Alien.cpp  sub_00020280
+0x000202A0  Alien.cpp  sub_000202A0
+0x000202C0  Alien.cpp  sub_000202C0
+0x00021070  Alien.cpp  GAlienDrone::AnimOverwrite(int, int)
+0x000214E0  Alien.cpp  GAlienWarrior::CanDrag()
+0x00021DE0  Alien.cpp  sub_00021DE0
+0x00021FC0  Alien.cpp  sub_00021FC0
+0x00021FE0  Alien.cpp  sub_00021FE0
+0x00022000  Alien.cpp  sub_00022000
+0x00022020  Alien.cpp  sub_00022020
+0x00022040  Alien.cpp  sub_00022040
+0x00022060  Alien.cpp  sub_00022060
+0x00023940  Alien.cpp  GAlienPraetorian::AcquireJITWeaponSwap()
+0x00023A40  Alien.cpp  sub_00023A40
+0x00023FD0  Alien.cpp  sub_00023FD0
+0x00026CD0  Alien.cpp  sub_00026CD0
+0x00027130  Alien.cpp  GAlienCarrier::CanHuggerLaunch()
+0x00027140  Alien.cpp  sub_00027140
+0x00027150  Alien.cpp  sub_00027150
+0x00027160  Alien.cpp  sub_00027160
+0x00027190  Alien.cpp  GAlienWarrior::IsCrippled()
+0x00027200  Alien.cpp  GAdultAlien::IsCysticallyEnhanced()
+0x00027220  Alien.cpp  sub_00027220
+0x00027400  Alien.cpp  sub_00027400
+0x00027420  Alien.cpp  sub_00027420
+0x000274B0  Alien.cpp  sub_000274B0
+0x000275B0  Random.cpp  sub_000275B0
+0x000276E0  Random.cpp  sub_000276E0
+0x0002AD20  Camera.cpp  GCamera::SetFocus(CVector)
+0x0002AE50  AvPMultiPlay.cpp  GAvPMultiPlay::~GAvPMultiPlay()
+0x0002F800  AvPWorld.cpp  sub_0002F800
+0x0002FA80  AvPWorld.cpp  GAvPWorld::World2Screen(const CVector &)
+0x00031E20  AvPObject.cpp  GAvPObject::GetSkull(float *)
+0x00031E60  AvPObject.cpp  GAvPObject::AimingDeflections(float &, float &)
+0x00031E80  AvPObject.cpp  GAvPObject::VisualRadius(bool)
+0x00031E90  AvPObject.cpp  sub_00031E90
+0x00031EA0  AvPObject.cpp  sub_00031EA0
+0x00031EE0  AvPObject.cpp  sub_00031EE0
+0x00031F30  AuraUnitListKiller.cpp  GAuraUnitListKiller::~GAuraUnitListKiller()
+0x00049570  UnitStatusIcon.cpp  sub_00049570
+0x00049660  SkullKeeper.cpp  sub_00049660
+0x00049710  SkullKeeper.cpp  sub_00049710
+0x0004B920  Blazer.cpp  sub_0004B920
+0x0004B950  Blazer.cpp  GWeapon::GetTargetIndex()
+0x0004C3F0  Cocoon.cpp  GCocoon::DoTerminalEffects()
+0x0004DBC0  ChestBurster.cpp  sub_0004DBC0
+0x0004DE30  ChestBurster.cpp  sub_0004DE30
+0x0004DE40  ChestBurster.cpp  sub_0004DE40
+0x0004DFC0  DropShip.cpp  GDropShip::~GDropShip()
+0x0004F200  DropShipAI.cpp  sub_0004F200
+0x000501D0  Decor.cpp  sub_000501D0
+0x00050230  Decor.cpp  sub_00050230
+0x00050270  OrderingSelectButton.cpp  GOrderingSelectButton::Enable(bool)
+0x00051580  Background.cpp  sub_00051580
+0x000543D0  Ordering3dDisplay.cpp  GOrdering3dDisplay::Process()
+0x00054770  DecalManager.cpp  sub_00054770
+0x000547E0  DecalManager.cpp  GDecalManager::~GDecalManager()
+0x00056340  light.cpp  sub_00056340
+0x0005A280  Hugger.cpp  GHugger::IsLifeSustained()
+0x0005A290  Hugger.cpp  GHugger::CanBeDamaged(CHarmMessage *)
+0x0005A2A0  Hugger.cpp  GHugger::GetHostAlien(GUnit *)
+0x0005BBB0  HuggerAI.cpp  sub_0005BBB0
+0x0005BEF0  HuggerAI.cpp  sub_0005BEF0
+0x0005BFD0  HuggerAI.cpp  sub_0005BFD0
+0x0005BFF0  HuggerAI.cpp  sub_0005BFF0
+0x0005C600  HuggerAI.cpp  GHuggerAI::FaceHuggedCondition(bool)
+0x0005CBB0  PraetorianHugger.cpp  GPraetorianHugger::GetHostAlien(GUnit *)
+0x0005CBF0  KillscreenData.cpp  CKillscreenData::Reset()
+0x0005CC20  KillscreenData.cpp  sub_0005CC20
+0x0005CD60  VisualizationObject.cpp  sub_0005CD60
+0x0005CDD0  VisualizationObject.cpp  GVisualizationObject::~GVisualizationObject()
+0x0005E910  GPlayerManager.cpp  GPlayerManager::Process()
+0x00060C70  Alien.cpp  sub_00060C70
+0x00060E20  Alien.cpp  GAlienPlayerManager::GetQueenExist()
+0x00060E30  Alien.cpp  GAlienPlayerManager::QueenExist(bool)
+0x00060E40  Alien.cpp  sub_00060E40
+0x00063690  PauseHandler.cpp  GPauseHandler::~GPauseHandler()
+0x00068640  ExitNoMemLogoObject.cpp  sub_00068640
+0x00069100  GamepadDisconnectHandler.cpp  GGamepadDisconnectHandler::~GGamepadDisconnectHandler()
+0x000692E0  loading.cpp  GLoadingScreen::~GLoadingScreen()
+0x0006A400  Location.cpp  sub_0006A400
+0x0006F1E0  Profile.cpp  sub_0006F1E0
+0x0006F230  AuroraTargetListKiller.cpp  AuroraTargetListKiller::~AuroraTargetListKiller()
+0x000705F0  Marine.cpp  sub_000705F0
+0x00071320  Synthetic.cpp  sub_00071320
+0x00076360  Projectile.cpp  sub_00076360
+0x0007C800  NPCAI.cpp  sub_0007C800
+0x0007D9B0  Synthetic.cpp  GCivilian::SetControllable(bool)
+0x0007D9C0  Synthetic.cpp  GCivilian::SetControllable()
+0x0007E100  Synthetic.cpp  sub_0007E100
+0x0007E150  FriendListKiller.cpp  FriendListKiller::~FriendListKiller()
+0x0007E210  ObjectAI.cpp  GObjectAI::GObjectAI()
+0x0007E980  ObjectiveManager.cpp  sub_0007E980
+0x000818A0  TorrentHandler.cpp  sub_000818A0
+0x000818F0  TorrentHandler.cpp  GTorrentHandler::~GTorrentHandler()
+0x00081D70  ZapHandler.cpp  sub_00081D70
+0x00081FC0  DamageHandler.cpp  sub_00081FC0
+0x000822D0  BleedingHandler.cpp  sub_000822D0
+0x000859C0  Predator.cpp  GPredatorBlooded::GetJITWeapon()
+0x000859E0  Predator.cpp  GPredatorBlooded::GetJITAttackAnim()
+0x00086370  Predator.cpp  GPredatorHydra::IsDoingBarrage()
+0x00086F90  Predator.cpp  sub_00086F90
+0x00087B30  Predator.cpp  sub_00087B30
+0x00087D20  Predator.cpp  sub_00087D20
+0x00087D40  Predator.cpp  sub_00087D40
+0x00087E00  Predator.cpp  GPredatorAI::EndCommandHealCondition(bool)
+0x00087E20  Predator.cpp  sub_00087E20
+0x000889E0  Predator.cpp  sub_000889E0
+0x00089BE0  PredatorUI.cpp  sub_00089BE0
+0x0008AAF0  TrailBullet.cpp  GTrailBullet::HasExpired()
+0x0008C270  MIRVBullet.cpp  GMIRVBullet::Detonate()
+0x0008CB80  Queen.cpp  sub_0008CB80
+0x0008CBD0  Queen.cpp  sub_0008CBD0
+0x0008DA40  Queen.cpp  GQueen::OnFailedKnockdown(GWeapon *)
+0x0008DDE0  Queen.cpp  sub_0008DDE0
+0x0008DE00  Queen.cpp  sub_0008DE00
+0x0008F5C0  Alien.cpp  sub_0008F5C0
+0x00091070  SentryGun.cpp  sub_00091070
+0x00091480  DropPod.cpp  GDropPod::~GDropPod()
+0x00091A20  DropPodAI.cpp  sub_00091A20
+0x00093700  EffectTable.cpp  sub_00093700
+0x00095F00  Squad.cpp  sub_00095F00
+0x00097720  CloakerControlPod.cpp  GCloakerControlPod::DoWhenStored(bool)
+0x0009A4F0  Synthetic.cpp  GSynthetic::CanBeDamaged(CHarmMessage *)
+0x0009B990  Synthetic.cpp  GMotionTracker::~GMotionTracker()
+0x0009C5A0  Synthetic.cpp  GSynthetic::CanAim()
+0x0009C5B0  Synthetic.cpp  GSynthetic::IsDisabled()
+0x0009F560  TriggerListKiller.cpp  TriggerListKiller::~TriggerListKiller()
+0x000A87A0  ScriptedEventAction.cpp  GScriptedEventAction::~GScriptedEventAction()
+0x000A87D0  ScriptedEventAction.cpp  GScriptedEventAction::SpecifyEditable(EditableInfo * &)
+0x000A8AB0  SpawnerSuperAction.cpp  GSpawnerSuperAction::~GSpawnerSuperAction()
+0x000AE590  TurretAI.cpp  sub_000AE590
+0x000B3BE0  Markers.cpp  GDisableForceAttackObject::~GDisableForceAttackObject()
+0x000B3CB0  Markers.cpp  sub_000B3CB0
+0x000BDEA0  ShiftActionButton.cpp  GShiftActionButton::CostCheck(int)
+0x000BF890  MiscCostDisplay.cpp  GMiscCostDisplay::~GMiscCostDisplay()
+0x000BFEE0  ScrollingTextManager.cpp  sub_000BFEE0
+0x000BFF30  ScrollingTextManager.cpp  GScrollingTextManager::~GScrollingTextManager()
+0x000C0D10  sound.cpp  sub_000C0D10
+0x000C0FC0  timer.cpp  sub_000C0FC0
+0x000C2C60  GroupingButton.cpp  GGroupingButton::HotKeyActivate(CInputData *)
+0x000C2C80  GroupingButton.cpp  GGroupingButton::FocusKeyActivate(CInputData *)
+0x000C4030  WaypointManager.cpp  sub_000C4030
+0x000C4200  Weapon.cpp  GWeapon::GetHarmWeaponStats(bool)
+0x000C8080  Beam.cpp  sub_000C8080
+0x000C81F0  WeaponAttackData.cpp  CWeaponAttackData::CWeaponAttackData(HGOBJECT)
+0x000C8730  Weapon.cpp  GWeapon::AttachMeTo(GPhysical *, bool, unsigned int, boo
+0x000CDE70  Weapon.cpp  GWeapon::StartHarmAura()
+0x000D07A0  OmniPlasmaCaster.cpp  GOmniPlasmaCaster::IsWeaponLockedOn()
+0x000D0F60  OmniFireCasterStats.cpp  sub_000D0F60
+0x000D6A10  Render.cpp  CRender::GetAttachPoint(CCRC32, int &, CMatrix *)
+0x000D6A50  Render.cpp  sub_000D6A50
+0x000D8940  collision.cpp  GPhysical::GetAttachPos(CCRC32)
+0x000D8A50  collision.cpp  GPhysical::IsSelectable()
+0x000D9730  Animatable.cpp  sub_000D9730
+0x000D9CC0  DebugManager.cpp  GDebugManager::~GDebugManager()
+0x000DA870  timer.cpp  sub_000DA870
+0x000DADB0  Renderer.cpp  sub_000DADB0
+0x000DB370  Renderer.cpp  sub_000DB370
+0x000DC410  fsworld.cpp  GfsWorld::World2ScreenZ(const CVector &, float &)
+0x000DC420  fsworld.cpp  sub_000DC420
+0x000DC430  fsworld.cpp  sub_000DC430
+0x000DC5E0  Profile.cpp  sub_000DC5E0
+0x000DC920  SectionMgr.cpp  CSinglePlotter::SetHandle(HGOBJECT)
+0x000DCD60  SectionMgr.cpp  sub_000DCD60
+0x000DE540  multiplay.cpp  sub_000DE540
+0x000DE650  multiplay.cpp  sub_000DE650
+0x000DE6A0  multiplay.cpp  sub_000DE6A0
+0x000E0900  StateTable.cpp  sub_000E0900
+0x000E14F0  sound.cpp  GSoundSystem::~GSoundSystem()
+0x000E17D0  sound.cpp  GSoundSystem::Status(SoundStatus &)
+0x000E8280  RendResource.cpp  CRendResource::GetNodePos(int, CVector &)
+0x000E82B0  RendResource.cpp  sub_000E82B0
+0x000E82D0  RendResource.cpp  CRendResource::GetAnimationData(CVector &, CVector *, un
+0x000E82E0  RendResource.cpp  CRendResource::GetBoundingBox(RECT &, int)
+0x000EE470  FenceNode.cpp  GFenceNode::Unregister()
+0x000EF050  MarkSelect.cpp  GMarkSelect::Process()
+0x000F2040  ParticleSystem.cpp  sub_000F2040
+0x000F7530  TrailSystem.cpp  GTrailSystem::DestroyParticle(ParticleStub *)
+0x000FC600  EmitterEdit.cpp  GEmitterEdit::~GEmitterEdit()
+0x000FD220  ParticleEdit.cpp  GParticleEdit::~GParticleEdit()
+0x000FF060  SceneFader.cpp  sub_000FF060
+0x000FF820  KeyedFader.cpp  sub_000FF820
+0x001040D0  TrailGlyph.cpp  sub_001040D0
+0x001041D0  Wind.cpp  GWind::~GWind()
+0x00105EF0  DebrisField.cpp  GDebrisField::Depopulate()
+0x00106BA0  DecalField.cpp  GDecalField::Depopulate()
+0x00115460  TrailInstance.cpp  GTrailInstance::Pause(bool)
+0x00115470  TrailInstance.cpp  sub_00115470
+0x001164F0  rendminimap.cpp  sub_001164F0
+0x00116770  rendminimap.cpp  sub_00116770
+0x00116A50  rendminimap.cpp  sub_00116A50
+0x00116CF0  rendminimap.cpp  sub_00116CF0
+0x0011C8E0  light.cpp  GDirectionalLight::Process()
+0x0011E8E0  light.cpp  sub_0011E8E0
+0x0011EA10  light.cpp  sub_0011EA10
+0x0011EA30  light.cpp  sub_0011EA30
+0x0011EA50  light.cpp  sub_0011EA50
+0x0011EA70  light.cpp  sub_0011EA70
+0x0011EA90  light.cpp  sub_0011EA90
+0x0011EAB0  light.cpp  LightSetExtents(float, float, float, float, int, int, in
+0x00121170  VideoPlayer.cpp  sub_00121170
+0x00122830  collision.cpp  sub_00122830
+0x001235C0  collision.cpp  sub_001235C0
+0x00124230  collision.cpp  sub_00124230
+0x00124450  Projectile.cpp  GProjectile::HasExpired()
+0x00126FB0  fsworld.cpp  sub_00126FB0
+0x00131EC0  RendBaseMesh.cpp  CRendMap::Render(CRender *)
+0x00132000  RendBaseMesh.cpp  CRendMap::GetBoundingBox(RECT &, int)
+0x001342B0  VolumeTree.cpp  sub_001342B0
+0x00134D00  BaseFont.cpp  sub_00134D00
+0x00135130  RendResource.cpp  sub_00135130
+0x00135140  RendResource.cpp  sub_00135140
+0x001352E0  RendResource.cpp  sub_001352E0
+0x001352F0  RendResource.cpp  sub_001352F0
+0x001354A0  RendResource.cpp  sub_001354A0
+0x00135730  RendResource.cpp  sub_00135730
+0x00135740  RendResource.cpp  sub_00135740
+0x00135930  RendResource.cpp  sub_00135930
+0x00135FA0  RendResource.cpp  sub_00135FA0
+0x00136290  RendResource.cpp  sub_00136290
+0x00136550  RendResource.cpp  sub_00136550
+0x00138AB0  RendMesh.cpp  sub_00138AB0
+0x00138AE0  Sprite.cpp  sub_00138AE0
+0x001390A0  Fog.cpp  GFog::SpecifyEditable(EditableInfo * &)
+0x001390B0  Fog.cpp  sub_001390B0
+0x0013F290  RendStaticSkeleton.cpp  CRendStaticSkeleton::GetResource(CRender *)
+0x0013F300  RendDynamicSkeleton.cpp  CRendDynamicSkeleton::FlushFrameCache()
+0x0013F310  RendDynamicSkeleton.cpp  CRendDynamicSkeleton::GetResource(CRender *)
+0x0013F320  RendDynamicSkeleton.cpp  sub_0013F320
+0x0013F340  RendDynamicSkeleton.cpp  sub_0013F340
+0x0013F350  RendDynamicSkeleton.cpp  sub_0013F350
+0x0013F360  RendDynamicSkeleton.cpp  sub_0013F360
+0x0013F370  RendDynamicSkeleton.cpp  sub_0013F370
+0x0013F380  RendDynamicSkeleton.cpp  sub_0013F380
+0x0013F6D0  SkeletonWorkspace.cpp  CSkeletonWorkspace::GetMatrix(CMatrix * &)
+0x0013F6E0  SkeletonWorkspace.cpp  CSkeletonWorkspace::GetMatrix(CMatrix * &, CRender * &)
+0x0013F700  SkeletonWorkspace.cpp  CSkeletonWorkspace::MovedTo(CRender *)
+0x00140CA0  RendBaseMesh.cpp  sub_00140CA0
+0x0001F400  Alien.cpp  DoTerminalEffects__11GAdultAlienFv
+0x00021BF0  Alien.cpp  CanBeKnockedBack__13GAlienWarriorFi18EKnockbackMobility
+0x00026DC0  Alien.cpp  sub_00026DC0
+0x0004A7A0  Blazer.cpp  AttachMeTo__7GBlazerFP9GPhysicalbUibb
+0x0004AB00  Blazer.cpp  GetFrameAlignedBeamEndPoints__7GBlazerFUiR7CVectorR7CVector
+0x0004B240  Blazer.cpp  Cancel__7GBlazerFv
+0x0010BCC0  KeyedFlare.cpp  Eject__11GKeyedFlareFP7CRender
+0x00070CE0  Marine.cpp  SuspendWeapons__15GMarineInfantryFb
+0x00070E10  Marine.cpp  Process__11GMarinePyroFv
+0x00085770  Predator.cpp  InitWeapons__16GPredatorBloodedFv
+0x00086B40  Predator.cpp  Process__15GPredatorBlazerFv
+0x00088060  Predator.cpp  Attach__16GPredatorHydraAIFP7GPosRot
+0x00089DF0  Projectile.cpp  Configure__14GAvPProjectileFRC15CProjectileInit
+0x000DAAD0  Render.cpp  sub_000DAAD0
+0x0008B060  SmartGunBullet.cpp  GetCenterDistSq__15GSmartGunBulletFP5GUnit
+0x00103600  TrailGlyph.cpp  Eject__11GTrailGlyphFP7CRender
+0x0010E090  shell.cpp  Render__10GShellPassFv
+0x001404E0  RendDynamicSkeleton.cpp  GetNodePos__20CRendDynamicSkeletonFiR7CVector
+0x000D79A0  Object.cpp  sub_000D79A0
+0x000B3B90  Markers.cpp  sub_000B3B90
+0x000EDEE0  FOWManager.cpp  sub_000EDEE0
+0x00108020  ObjectField.cpp  sub_00108020
+# 2026-10-22: symgen accepts these exactly (tools sweep run decides; failures go to classgen_skip.txt)
+0x00011000
+0x00012C70
+0x00013C60
+0x00014000
+0x00014240
+0x00014360
+0x00019360
+0x00019C80
+0x0001DAA0
+0x0001E2A0
+0x000276F0
+0x000288C0
+0x0002AD40
+0x0002ADE0
+0x0002B440
+0x0002FA60
+0x0002FD90
+0x00031220
+0x00031E40
+0x00031EB0
+0x00032030
+0x00032150
+0x00049600
+0x0004C460
+0x0004C7C0
+0x0004E8B0
+0x0004EAA0
+0x00050FA0
+0x00051000
+0x00051D20
+0x000559E0
+0x00055DB0
+0x000564D0
+0x000566B0
+0x00056710
+0x00056CE0
+0x00056DA0
+0x000570F0
+0x000580C0
+0x00058630
+0x00058890
+0x000588D0
+0x00058AF0
+0x00058B20
+0x00058E20
+0x00058F00
+0x0005BAC0
+0x0005BF90
+0x0005C010
+0x00063630
+0x00063900
+0x00063930
+0x000679D0
+0x00067AD0
+0x00067D40
+0x00068410
+0x000690B0
+0x0006A230
+0x0006A8C0
+0x0006C330
+0x0006C600
+0x000795A0
+0x00079670
+0x00079EC0
+0x00079FC0
+0x0007A540
+0x0007AD70
+0x0007C9B0
+0x0007E2D0
+0x0007E6B0
+0x0007E890
+0x0007E8D0
+0x0007E8F0
+0x0007E9E0
+0x0007ED80
+0x00081EB0
+0x00082360
+0x0008AB20
+0x0008BC70
+0x0008C110
+0x000914B0
+0x00091780
+0x00093050
+0x00093330
+0x00093400
+0x00093450
+0x000935D0
+0x000947B0
+0x00097690
+0x000976F0
+0x000979D0
+0x00097CD0
+0x00098680
+0x00098E20
+0x00099070
+0x0009F4D0
+0x000A0CB0
+0x000A4740
+0x000A5FD0
+0x000A65D0
+0x000A71F0
+0x000A8710
+0x000AA460
+0x000AABC0
+0x000AAEF0
+0x000AAF60
+0x000AB450
+0x000AB560
+0x000AB9D0
+0x000ABE30
+0x000AC2A0
+0x000AC6E0
+0x000ACDC0
+0x000AD600
+0x000AD6F0
+0x000ADAD0
+0x000AE860
+0x000AF040
+0x000B1590
+0x000B1A40
+0x000B1B40
+0x000B2320
+0x000B2670
+0x000B3840
+0x000B3C80
+0x000B3D00
+0x000C1080
+0x000C1210
+0x000C3030
+0x000C4080
+0x000C7FE0
+0x000CA990
+0x000CE0D0
+0x000CF280
+0x000D1010
+0x000D1180
+0x000D25E0
+0x000D2650
+0x000D69C0
+0x000D6DC0
+0x000D6F50
+0x000D85F0
+0x000D8C40
+0x000D8CD0
+0x000D8FE0
+0x000D9040
+0x000D96F0
+0x000D9700
+0x000D9860
+0x000D9AB0
+0x000DAAB0
+0x000DABF0
+0x000DAF90
+0x000DBCD0
+0x000DCDC0
+0x000DE590
+0x000DFA70
+0x000DFA80
+0x000DFAF0
+0x000DFD00
+0x000DFD40
+0x000E0C60
+0x000E0C90
+0x000E1200
+0x000E15A0
+0x000E2110
+0x000E24D0
+0x000E8300
+0x000E8310
+0x000E8320
+0x000E8330
+0x000E8340
+0x000EAB90
+0x000EB1A0
+0x000EDF40
+0x000EE2A0
+0x000EEFC0
+0x000EF030
+0x000F5980
+0x000F6930
+0x000F72C0
+0x000F96F0
+0x000FB730
+0x000FE190
+0x00105A70
+0x001064C0
+0x00109350
+0x0010A750
+0x0010AB70
+0x0010C030
+0x0010E000
+0x001121D0
+0x00112490
+0x001134B0
+0x001140F0
+0x001150A0
+0x001150D0
+0x00115480
+0x0011C830
+0x0011CAF0
+0x0011E010
+0x0011E130
+0x0011EE70
+0x00131EE0
+0x00131EF0
+0x00131FA0
+0x00132C40
+0x00133A80
+0x00133B40
+0x00133B50
+0x00133B60
+0x00133B80
+0x00134230
+0x00134270
+0x001350C0
+0x001350F0
+0x00135120
+0x00135150
+0x00137D90
+0x001383E0
+0x00138F60
+0x0013E7C0
+0x0013ED70
+0x0013F230
+0x0013F670
+0x00140CE0
+0x00141070

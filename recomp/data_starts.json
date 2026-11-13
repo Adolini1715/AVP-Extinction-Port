@@ -1,0 +1,17 @@
+[
+ {
+  "start": "0x000D829E",
+  "owner": "0x000D8060",
+  "why": "a jump table after the function (mov edi, edi pad, then case addresses): data, not code; nothing references it"
+ },
+ {
+  "start": "0x000EBE6E",
+  "owner": "0x000EB3B0",
+  "why": "a jump table after the function (mov edi, edi pad, then case addresses): data, not code; nothing references it"
+ },
+ {
+  "start": "0x0012DCD2",
+  "owner": "0x0012D700",
+  "why": "a jump table after the function (mov edi, edi pad, then case addresses): data, not code; nothing references it"
+ }
+]

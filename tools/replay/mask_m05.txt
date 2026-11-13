@@ -1,0 +1,13 @@
+# M05 gate residue (notes/fable.md): stale dead-stack word copied into path/unit records by lifted GPhysical::SetPosRot,
+# first seen at frame 950, then propagated to two more heap pages. Everything else matches for 3000 frames.
+0276A000-0276AFFF
+0276C000-0276CFFF
+0249A000-0249AFFF
+02886000-02886FFF
+# Same residue after the 2026-10-27 workspace rebuild: the heap sits a page lower (and the
+# propagated record elsewhere), so the pages move. Kept both sets; the origin is identical
+# (replay_triage 950 02769000: GPathfindingMover::Process -> GPhysical::SetPosRot, frame 911).
+02769000-02769FFF
+0276B000-0276BFFF
+0239D000-0239DFFF
+02885000-02885FFF

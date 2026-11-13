@@ -1,0 +1,50 @@
+# T02 replay script (Alien tutorial: selection, commands, attitudes, waypoints, groups). B+n = pad polls after
+# the briefing went up. The pointer is the screen centre: "cursor over X" = the camera look point (left stick)
+# on X. Left stick scroll ramps with the hold time (8 polls ~0.8 units, 12 ~1.7, 16 ~2.9, 20 ~4.5, 24 ~6.5,
+# ~0.9/poll after ~50). Chords: the event list is first-match-wins, so a chord line (rt+b) sits BEFORE the line
+# that holds the modifier (rt:30) over it. Tuned with a live sampler; every goal completes, the last
+# ("This concludes the advanced tutorial.") at ~frame 4900.
+B+60 start                 # close the briefing
+B+150 a
+# step 1: double-tap A on the Drone under the cursor (selects all three Drones)
+B+300 a:3
+B+306 a:3
+# step 2: cursor onto the Warrior, hold LT and press A to add him
+B+400 lleft+lup:17
+B+500 lt+a:4
+B+490 lt:30
+# step 3: attack-move (LT+B) to the highlighted square (44,83); the group fights the Marine medics
+B+650 lright+ldown:49
+B+699 ldown:27
+B+900 lt+b:4
+B+890 lt:30
+# step 4: hold RT for the command menu; steps 5..8: RT+D-pad up/right/down/left = Aggressive/Defensive/Stand Ground/No Attack
+B+1400 rt:40
+B+1550 rt+up:4
+B+1540 rt:30
+B+1700 rt+right:4
+B+1690 rt:30
+B+1850 rt+down:4
+B+1840 rt:30
+B+2000 rt+left:4
+B+1990 rt:30
+# step 9: three waypoints with RT held throughout (RT+B, move the cursor with RT still down, ...)
+B+2100 rt+b:4
+B+2200 rt+b:4
+B+2300 rt+b:4
+B+2150 rt+lright:20
+B+2250 rt+lup:20
+B+2090 rt:300
+# step 10: Y jumps to the battle event (a Marine and a Drone appear ~B+2900); step 11: X jumps to the base unit
+B+3200 y:4
+B+3400 x:4
+# step 12: hold White and press the D-pad (group); step 13: A on the background, then D-pad selects the group
+B+3600 white+up:4
+B+3590 white:30
+B+3800 lright:20
+B+3900 a:4
+B+4000 up:4
+# the last goal is done at ~B+4050; A ends the tutorial, the next level's briefing (modal) needs START
+B+4200 a:5
+B+4500 start:5
+B+4650 start:5

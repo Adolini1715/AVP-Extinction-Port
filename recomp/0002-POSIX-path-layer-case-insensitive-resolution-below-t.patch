@@ -1,0 +1,84 @@
+From 12e7ef17464dbfda14db38536845afe6c26f2d96 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 14 Oct 2026 17:10:13 -0500
+Subject: [PATCH 2/2] POSIX path layer: case-insensitive resolution below the
+ base directory
+
+The Xbox filesystems are case-insensitive and titles depend on it (AvP:
+Extinction opens \TBD\ATTRACT\ while the disc stores tbd/Attract/). When the
+exact host path does not exist, resolve each component with a case-insensitive
+directory lookup; components that do not exist keep their spelling.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01R9eszV9Sj6LuQjGuQdWK64
+---
+ src/kernel/kernel_path.c | 46 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/src/kernel/kernel_path.c b/src/kernel/kernel_path.c
+index c2981ef..c06a011 100644
+--- a/src/kernel/kernel_path.c
++++ b/src/kernel/kernel_path.c
+@@ -627,6 +627,51 @@ static BOOL posix_partition_device_path(const char *xbox_path, char *out, DWORD
+     return TRUE;
+ }
+ 
++/*
++ * The Xbox filesystem (FATX and the DVD's XDVDFS) is case-insensitive and
++ * titles rely on it: AvP: Extinction opens \TBD\ATTRACT\... while the disc
++ * stores tbd/Attract/. When the exact host path does not exist, resolve each
++ * component below the base directory case-insensitively. Components that do
++ * not exist keep their spelling, so creating a new file still works.
++ */
++#include <dirent.h>
++#include <strings.h>
++static void posix_fold_case(char *path, size_t base_len)
++{
++    struct stat st;
++    if (stat(path, &st) == 0) return;
++    char out[MAX_PATH * 2];
++    size_t o = base_len < sizeof(out) - 1 ? base_len : sizeof(out) - 1;
++    memcpy(out, path, o); out[o] = 0;
++    const char *p = path + base_len;
++    int exists = 1;
++    while (*p) {
++        while (*p == '/') p++;
++        if (!*p) break;
++        const char *e = strchr(p, '/'); size_t n = e ? (size_t)(e - p) : strlen(p);
++        char comp[256]; if (n >= sizeof(comp)) return;
++        memcpy(comp, p, n); comp[n] = 0;
++        const char *use = comp; char found[256];
++        if (exists) {
++            DIR *d = opendir(o ? out : "/");
++            exists = 0;
++            if (d) {
++                struct dirent *de;
++                while ((de = readdir(d))) {
++                    if (strcasecmp(de->d_name, comp) == 0) {
++                        snprintf(found, sizeof(found), "%s", de->d_name); use = found; exists = 1; break;
++                    }
++                }
++                closedir(d);
++            }
++        }
++        if (o + 1 + strlen(use) >= sizeof(out)) return;
++        out[o++] = '/'; strcpy(out + o, use); o += strlen(use);
++        p += n;
++    }
++    snprintf(path, MAX_PATH, "%s", out);
++}
++
+ BOOL xbox_translate_path(const char* xbox_path, xbox_host_char* host_path_buf, DWORD buf_size)
+ {
+     const char* remainder = NULL;
+@@ -696,6 +741,7 @@ translate:
+                 host_path_buf[--n] = '\0';
+         }
+ 
++        posix_fold_case(host_path_buf, strlen(base_dir));
+         XBOX_TRACE(XBOX_LOG_PATH, "%s -> %s", xbox_path, host_path_buf);
+         return TRUE;
+     }
+-- 
+2.43.0
+

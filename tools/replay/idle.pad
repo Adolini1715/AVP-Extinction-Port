@@ -1,0 +1,2 @@
+# idle: close the briefing with START, then do nothing (telemetry scenario "idle")
+B+60 start

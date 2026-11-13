@@ -1,0 +1,22 @@
+# never commit game data or anything derived from it
+disc/
+*.xiso
+*.xbe
+strings.txt
+funcs.json
+xbe_info.json
+rtti.txt
+listing.txt
+ps2/
+vtmatch.json
+mod/
+m01_*.txt
+m01_b13.bin
+stats/all_fields.csv
+__pycache__/
+xbsymbols_raw.txt
+xgasm/
+docs/frames/
+# what Install.bat makes
+_build/
+install-log.txt

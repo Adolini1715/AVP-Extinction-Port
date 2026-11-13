@@ -1,0 +1,15 @@
+{
+ "_doc": "Calls that never return and loops a function never leaves: a verification ends there (tools/noreturn_gen.py -> recomp/noreturn.inc for the bridge; tools/snap_replay.py and tools/reachfuzz.py read this file). callees: a function under test that calls one of these directly is compared at the callee's entry. points: an address in a function's own code (a spin loop) where it is compared.",
+ "callees": {
+  "0x00142DB1": "ExitThread",
+  "0x0011A640": "vbail (prints the message, then spins)",
+  "0xFE000098": "PsTerminateSystemThread (kernel import slot 38)"
+ },
+ "points": {
+  "0x0011A661": "vbail: the spin after OutputDebugStringA",
+  "0x000DE9F8": "sub_000DE9B0 (watchdog thread): the spin after its vbail",
+  "0x000F0B86": "CShell::MainLoop: the back edge, one pass compared (the loop runs until the game quits)",
+  "0x000633D0": "sub_00063190: the spin after its last frames",
+  "0x0006A0E9": "GExitMissionGoalsButton constructor 0x69F50: its frame loop (runs until the screen closes), one pass compared"
+ }
+}

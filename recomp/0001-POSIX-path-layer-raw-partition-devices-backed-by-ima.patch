@@ -1,0 +1,136 @@
+From 68c5a521be9a937ca54046ffc381cf380719d76b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 14 Oct 2026 15:28:36 -0500
+Subject: [PATCH 1/2] POSIX path layer: raw partition devices backed by images,
+ [PATH] logging
+
+Ports the Win32 branch's \Device\Harddisk0\PartitionN image support to the
+POSIX backend (Partition0.img carries the retail partition table at 0x800), so
+titles that open partition0 at startup no longer return to the dashboard.
+Only the bare device maps to an image; PartitionN\ is the filesystem root.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01R9eszV9Sj6LuQjGuQdWK64
+---
+ src/kernel/kernel_path.c | 80 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+
+diff --git a/src/kernel/kernel_path.c b/src/kernel/kernel_path.c
+index caf6390..c2981ef 100644
+--- a/src/kernel/kernel_path.c
++++ b/src/kernel/kernel_path.c
+@@ -484,6 +484,7 @@ translate:
+ #include <stdlib.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++static void posix_create_partition_images(void);
+ #include <errno.h>
+ 
+ static char s_game_dir[MAX_PATH];
+@@ -549,10 +550,83 @@ void xbox_path_init(const char* game_dir, const char* save_dir)
+     strip_trailing_slash(s_save_dir);
+ 
+     s_initialized = TRUE;
++    posix_create_partition_images();
+     xbox_log(XBOX_LOG_INFO, XBOX_LOG_PATH, "Path init: game=%s, save=%s",
+              s_game_dir, s_save_dir);
+ }
+ 
++/*
++ * POSIX port of the raw-disk support in the Win32 branch above:
++ * \Device\Harddisk0\PartitionN (nothing below it) is backed by an image file
++ * <save>/PartitionN.img, and Partition0.img carries the standard retail
++ * partition table at 0x800 so XAPI's utility-drive mount can read it.
++ * Without this, titles that open partition0 at startup (AvP: Extinction does)
++ * get STATUS_OBJECT_NAME_NOT_FOUND and return to the dashboard.
++ */
++static void posix_write_partition_table(const char *path)
++{
++    static const struct { const char *name; uint32_t start, size; } parts[] = {
++        { "XBOX_PART_X",  0x00000400, 0x00177000 },
++        { "XBOX_PART_Y",  0x00177400, 0x00177000 },
++        { "XBOX_PART_Z",  0x002EE400, 0x00177000 },
++        { "XBOX_PART_C",  0x00465400, 0x000FA000 },
++        { "XBOX_PART_E",  0x0055F400, 0x00465400 },
++    };
++    unsigned char sector[512];
++    FILE *f = fopen(path, "r+b");
++    if (!f) f = fopen(path, "w+b");
++    if (!f) return;
++    memset(sector, 0, sizeof(sector));
++    memcpy(sector, "****PARTINFO****", 16);
++    for (size_t i = 0; i < sizeof(parts) / sizeof(parts[0]); i++) {
++        unsigned char *e = sector + 48 + i * 32;
++        size_t n = strlen(parts[i].name);
++        uint32_t v[4] = { 0x80000000u, parts[i].start, parts[i].size, 0 };
++        memset(e, ' ', 16);
++        memcpy(e, parts[i].name, n < 16 ? n : 16);
++        memcpy(e + 16, v, 16);
++    }
++    fseek(f, 0x800, SEEK_SET);
++    fwrite(sector, 1, sizeof(sector), f);
++    fclose(f);
++}
++
++static void posix_create_partition_images(void)
++{
++    static const unsigned long long sectors[6] = {
++        0x009B4400ull, 0x00465400ull, 0x000FA000ull, 0x00177000ull, 0x00177000ull, 0x00177000ull };
++    char img[MAX_PATH + 32];
++    mkdir_p(s_save_dir);
++    for (int i = 0; i < 6; i++) {
++        snprintf(img, sizeof(img), "%s/Partition%d.img", s_save_dir, i);
++        FILE *f = fopen(img, "r+b");
++        if (!f) f = fopen(img, "w+b");
++        if (!f) continue;
++        if (ftruncate(fileno(f), (off_t)(sectors[i] * 512ull)) != 0) { /* sparse; best effort */ }
++        fclose(f);
++    }
++    snprintf(img, sizeof(img), "%s/Partition0.img", s_save_dir);
++    posix_write_partition_table(img);
++}
++
++static BOOL posix_partition_device_path(const char *xbox_path, char *out, DWORD n)
++{
++    static const char *prefix = "\\Device\\Harddisk0\\Partition";
++    int len = match_prefix(xbox_path, prefix);
++    const char *rest;
++    int digit;
++    if (!len) return FALSE;
++    digit = xbox_path[len];
++    if (digit < '0' || digit > '9') return FALSE;
++    rest = xbox_path + len + 1;
++    /* Only the bare device. "PartitionN\\" with a trailing separator is the
++     * root directory of that partition's filesystem (XAPI opens partition1\\
++     * as a directory), so it falls through to the rules table. */
++    if (*rest != '\0') return FALSE;
++    snprintf(out, n, "%s/Partition%c.img", s_save_dir, digit);
++    return TRUE;
++}
++
+ BOOL xbox_translate_path(const char* xbox_path, xbox_host_char* host_path_buf, DWORD buf_size)
+ {
+     const char* remainder = NULL;
+@@ -572,6 +646,11 @@ BOOL xbox_translate_path(const char* xbox_path, xbox_host_char* host_path_buf, D
+             return xbox_translate_path(linked, host_path_buf, buf_size);
+     }
+ 
++    if (posix_partition_device_path(xbox_path, host_path_buf, buf_size)) {
++        fprintf(stderr, "  [PATH] %s -> partition image\n", xbox_path);
++        return TRUE;
++    }
++
+     for (int i = 0; i < PATH_RULE_COUNT; i++) {
+         skip = match_prefix(xbox_path, s_rules[i].prefix);
+         if (skip) {
+@@ -590,6 +669,7 @@ BOOL xbox_translate_path(const char* xbox_path, xbox_host_char* host_path_buf, D
+     return TRUE;
+ 
+ translate:
++    fprintf(stderr, "  [PATH] %s\n", xbox_path);   /* as the Win32 branch: pairs with [FILE] */
+     {
+         char remainder_posix[MAX_PATH];
+         snprintf(remainder_posix, sizeof(remainder_posix), "%s", remainder);
+-- 
+2.43.0
+

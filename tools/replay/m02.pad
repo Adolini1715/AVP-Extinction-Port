@@ -1,0 +1,48 @@
+# M02 (Marine 2) replay script: unit selection, minimap, single-marine combat (notes/wave1.md W5b).
+# Run with MISSION=M02. polls B+n as in m01.pad. Keep one marine fighting at a time: the lifted DirectSound
+# voice pool (about 6 voices) faults when several marines fire at once, which ends the lifted reference run.
+B+60 start
+B+150 a
+# selection variety: d-pad cycle, X/Y jumps, White/Black, double tap, add with LT, grow box with held A
+B+260 right
+B+290 right
+B+320 left
+B+350 up
+B+380 down
+B+410 x
+B+440 y
+B+470 white
+B+500 black
+B+540 a
+B+552 a
+B+600 lt+a:6
+B+592 lt:30
+B+680 white+right
+B+720 black+left
+# minimap: right stick moves the minimap cursor, A jumps
+B+780 rright:20
+B+840 a
+B+900 rleft:30
+B+960 a
+B+1020 rup:20
+B+1080 a
+B+1140 rdown:25
+B+1200 a
+# pointer over odd ground, a box select, a command on unreachable ground
+B+1260 lleft:30
+B+1320 a:40
+B+1400 lup:40
+B+1460 b
+B+1520 ldown:60
+B+1580 b
+B+1640 a
+# single Infantry attack as in m6
+B+1700 lleft:17
+B+1760 lup:10
+B+1820 a
+B+1900 lright:115
+B+2050 lup:30
+B+2150 b
+B+3000 lleft:37
+B+3080 lup:40
+B+3200 b

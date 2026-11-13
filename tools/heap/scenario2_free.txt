@@ -1,0 +1,13 @@
+raw va=145BAD TAG arg=*30BEB4 arg=0 arg=0
+a 1 FF80          # above the threshold: mapped on its own
+f 1
+a 2 FF80 1
+f 2 1
+a 3 300
+a 4 2
+f 3              # 0x300 units: list 0
+a 5 90
+a 6 2
+f 5              # into list 0 before the larger one
+raw va=145BAD TAG stub=1 poke=[4020]+250:@S+800 poke=@S+814:143F29 arg=*30BEB4 arg=0 arg=[@S+E18]+0
+raw va=145BAD TAG poke=[4020]+250:0 arg=*30BEB4 arg=1 arg=[@S+E10]+0

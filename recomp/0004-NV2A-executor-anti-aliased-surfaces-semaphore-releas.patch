@@ -1,0 +1,250 @@
+From 0c4db77e2f98f4a541f6d10614bb3a7d05a7fab5 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 14 Oct 2026 19:13:12 -0500
+Subject: [PATCH] NV2A executor: anti-aliased surfaces, semaphore release,
+ context DMA objects
+
+- SET_SURFACE_FORMAT anti-aliasing (bits 12-15): clip and positions stay in
+  display pixels and are stretched onto the 2x (or 2x2) surface, as the GPU
+  does; frame dump prefers the resolved front buffer. Depth buffer 2048 wide.
+- SET_SEMAPHORE_OFFSET / BACK_END_WRITE_SEMAPHORE_RELEASE executed in stream
+  order: an exact completion fence for D3D_BlockOnTime (scan table had 0x1D6C
+  mislabelled as a z-stencil clear).
+- Context DMA handles resolved through RAMHT to the DMA object's base/limit in
+  the aperture's PRAMIN, as the hardware reads them.
+Found on AvP: Extinction (2x horizontal AA, semaphore DMA based at 0x1000).
+---
+ src/kernel/nv2a_pb_exec.c | 144 +++++++++++++++++++++++++++++++++++---
+ src/kernel/nv2a_pb_scan.c |   3 +-
+ 2 files changed, 135 insertions(+), 12 deletions(-)
+
+diff --git a/src/kernel/nv2a_pb_exec.c b/src/kernel/nv2a_pb_exec.c
+index c65632c..7f1e8a2 100644
+--- a/src/kernel/nv2a_pb_exec.c
++++ b/src/kernel/nv2a_pb_exec.c
+@@ -284,6 +284,17 @@ static struct {
+     uint64_t pixels;
+     uint32_t pixel_max;   /* brightest value any pixel write carried */
+     uint32_t clip_x, clip_w, clip_y, clip_h;
++    /* Anti-aliasing. SET_SURFACE_FORMAT bits 12-15: 0 CENTER_1, 1
++     * CENTER_CORNER_2 (2x horizontal), 2 SQUARE_OFFSET_4 (2x2). The clip the
++     * title sets and every position it emits stay in display pixels; the GPU
++     * stretches them by the factor onto a surface that many times larger, and
++     * the title later filters it down into the front buffer. clip_* above are
++     * the effective (surface) values, raw_clip_* what the title set. */
++    uint32_t raw_clip_x, raw_clip_w, raw_clip_y, raw_clip_h;
++    uint32_t sema_offset, sema_releases;
++    uint32_t ctx_dma[11];      /* SET_CONTEXT_DMA_* handles, methods 0x0180-0x01A8 */
++    float aa_sx, aa_sy;
++    uint64_t drawn_raw_area;
+     uint32_t clear_color;
+     uint32_t clears, unhandled_total;
+     uint32_t flip_read, flip_write, flip_modulo, flips;
+@@ -531,9 +542,12 @@ static uint32_t surface_bpp(void);
+ 
+ static void note_drawn(void)
+ {
+-    if (!s_gpu.drawn_stale && s_gpu.drawn_offset
+-        && s_gpu.clip_w * s_gpu.clip_h < s_gpu.drawn_w * s_gpu.drawn_h)
++    uint64_t raw_area = (uint64_t)s_gpu.raw_clip_w * s_gpu.raw_clip_h;
++    if (!raw_area)
++        raw_area = (uint64_t)s_gpu.clip_w * s_gpu.clip_h;
++    if (!s_gpu.drawn_stale && s_gpu.drawn_offset && raw_area < s_gpu.drawn_raw_area)
+         return;
++    s_gpu.drawn_raw_area = raw_area;
+     s_gpu.drawn_stale = 0;
+     s_gpu.drawn_offset = s_gpu.color_offset;
+     s_gpu.drawn_pitch = s_gpu.pitch;
+@@ -654,6 +668,68 @@ static void dump_surface_bmp(void)
+                 path, w, h, s_gpu.color_offset, bpp);
+ }
+ 
++/* Context DMA objects, as the GPU finds them.
++ *
++ * A SET_CONTEXT_DMA_* method names an object by handle. The NV2A looks the
++ * handle up in RAMHT (a hash table in instance memory, located by PFIFO's
++ * RAMHT register) and reads the DMA object it points at: flags, limit, and a
++ * frame address whose low 12 bits come from the flags' ADJUST field. Xbox D3D
++ * builds these in the aperture's PRAMIN window, which this runtime keeps as
++ * plain memory, so they can be read exactly as the hardware would.
++ * The table is scanned rather than hashed: same answer, no channel-id
++ * subtleties, and it is only done when a handle changes. */
++#define NV2A_APERTURE_VA  0xFD000000u
++#define NV2A_PRAMIN_OFF   0x00700000u
++#define NV2A_PRAMIN_SIZE  0x00100000u
++static int dma_object_base(uint32_t handle, uint32_t *base, uint32_t *limit)
++{
++    uint8_t *mem = (uint8_t *)xbox_GetMemoryOffset();
++    const uint8_t *ramin = mem + NV2A_APERTURE_VA + NV2A_PRAMIN_OFF;
++    uint32_t reg = *(const volatile uint32_t *)(mem + NV2A_APERTURE_VA + 0x2210);
++    uint32_t ht = ((reg >> 4) & 0x1F) << 12;
++    uint32_t ht_size = 0x1000u << ((reg >> 16) & 3);
++    uint32_t i;
++
++    if (!handle)
++        return 0;
++    if (!reg) { ht = 0; ht_size = 0x10000; }
++    for (i = 0; i + 8 <= ht_size && ht + i + 8 <= NV2A_PRAMIN_SIZE; i += 8) {
++        uint32_t h = *(const uint32_t *)(ramin + ht + i);
++        uint32_t ctx = *(const uint32_t *)(ramin + ht + i + 4);
++        if (h != handle || !(ctx & 0x80000000u))
++            continue;
++        {
++            uint32_t inst = (ctx & 0xFFFFu) << 4;
++            uint32_t flags, lim, frame;
++            if (inst + 12 > NV2A_PRAMIN_SIZE)
++                return 0;
++            flags = *(const uint32_t *)(ramin + inst);
++            lim   = *(const uint32_t *)(ramin + inst + 4);
++            frame = *(const uint32_t *)(ramin + inst + 8);
++            *base = (frame & 0xFFFFF000u) | (flags >> 20);
++            if (limit) *limit = lim;
++            return 1;
++        }
++    }
++    return 0;
++}
++
++/* Effective clip from the title's clip and the surface's anti-aliasing mode.
++ * RECOMP_NO_AA=1 ignores the mode (the old behaviour) for comparison. */
++static void aa_apply(void)
++{
++    static int no_aa = -1;
++    uint32_t mode = (s_gpu.format >> 12) & 0xF;
++    if (no_aa < 0)
++        no_aa = getenv("RECOMP_NO_AA") != NULL;
++    s_gpu.aa_sx = (!no_aa && (mode == 1 || mode == 2)) ? 2.0f : 1.0f;
++    s_gpu.aa_sy = (!no_aa && mode == 2) ? 2.0f : 1.0f;
++    s_gpu.clip_x = (uint32_t)(s_gpu.raw_clip_x * s_gpu.aa_sx);
++    s_gpu.clip_w = (uint32_t)(s_gpu.raw_clip_w * s_gpu.aa_sx);
++    s_gpu.clip_y = (uint32_t)(s_gpu.raw_clip_y * s_gpu.aa_sy);
++    s_gpu.clip_h = (uint32_t)(s_gpu.raw_clip_h * s_gpu.aa_sy);
++}
++
+ /* Defined below, next to the rest of the rasteriser; the clear path uses it
+  * for RECOMP_RASTER_TEST. */
+ static void raster_triangle(const float a[2], const float b[2],
+@@ -1248,10 +1324,15 @@ static void put_pixel(uint8_t *mem, uint32_t bpp, int x, int y, uint32_t argb)
+ /* Half-space fill. Barycentric edge functions rather than scanline slopes:
+  * the same test decides both windings, so a title that emits clockwise
+  * triangles does not silently render nothing. */
+-static void raster_triangle(const float a[2], const float b[2],
+-                            const float c[2], uint32_t argb,
++static void raster_triangle(const float a_in[2], const float b_in[2],
++                            const float c_in[2], uint32_t argb,
+                             const float uv[3][2])
+ {
++    /* Display pixels to surface pixels (anti-aliased surfaces are larger). */
++    float sx = s_gpu.aa_sx ? s_gpu.aa_sx : 1.0f, sy = s_gpu.aa_sy ? s_gpu.aa_sy : 1.0f;
++    const float a[2] = { a_in[0] * sx, a_in[1] * sy };
++    const float b[2] = { b_in[0] * sx, b_in[1] * sy };
++    const float c[2] = { c_in[0] * sx, c_in[1] * sy };
+     uint8_t *mem = (uint8_t *)xbox_GetMemoryOffset();
+     uint32_t bpp = surface_bpp();
+     float area;
+@@ -1536,7 +1617,7 @@ static void raster_indexed(uint32_t i0, uint32_t i1, uint32_t i2, uint32_t argb)
+ /* Depth buffers, host-side, one per zeta surface the title uses. The real one
+  * lives in guest memory in a tiled format nothing here decodes, and nothing
+  * the title does reads it back, so a float buffer per zeta offset is enough. */
+-#define NV_ZBUF_W 1024
++#define NV_ZBUF_W 2048   /* 1280-wide 2x anti-aliased targets */
+ #define NV_ZBUF_H 1024
+ static struct { uint32_t offset; float *z; } s_zbufs[4];
+ static int s_ftrace;            /* frame trace: 0 idle, 2 tracing, 3 done */
+@@ -1985,9 +2066,16 @@ static void xf_rows_parallel(const XfTri *T, XfCount *total)
+ }
+ #endif
+ 
+-static void raster_xf_triangle(const Nv2aVshOutput *va, const Nv2aVshOutput *vb,
+-                               const Nv2aVshOutput *vc)
++static void raster_xf_triangle(const Nv2aVshOutput *va_in, const Nv2aVshOutput *vb_in,
++                               const Nv2aVshOutput *vc_in)
+ {
++    /* Display pixels to surface pixels (anti-aliased surfaces are larger).
++     * Scaled copies: the originals belong to the caller's clipper. */
++    Nv2aVshOutput sva = *va_in, svb = *vb_in, svc = *vc_in;
++    const Nv2aVshOutput *va = &sva, *vb = &svb, *vc = &svc;
++    float sx = s_gpu.aa_sx ? s_gpu.aa_sx : 1.0f, sy = s_gpu.aa_sy ? s_gpu.aa_sy : 1.0f;
++    sva.pos[0] *= sx; svb.pos[0] *= sx; svc.pos[0] *= sx;
++    sva.pos[1] *= sy; svb.pos[1] *= sy; svc.pos[1] *= sy;
+     XfTri T;
+     XfCount cnt = {0, 0, 0};
+     const Nv2aVshOutput *v[3];
+@@ -2915,15 +3003,18 @@ void nv2a_pb_exec_method(uint32_t subch, uint32_t method, uint32_t param)
+     }
+     switch (method) {
+     case NV097_SET_SURFACE_CLIP_HORIZONTAL:
+-        s_gpu.clip_x = param & 0xFFFF;
+-        s_gpu.clip_w = (param >> 16) & 0xFFFF;
++        s_gpu.raw_clip_x = param & 0xFFFF;
++        s_gpu.raw_clip_w = (param >> 16) & 0xFFFF;
++        aa_apply();
+         break;
+     case NV097_SET_SURFACE_CLIP_VERTICAL:
+-        s_gpu.clip_y = param & 0xFFFF;
+-        s_gpu.clip_h = (param >> 16) & 0xFFFF;
++        s_gpu.raw_clip_y = param & 0xFFFF;
++        s_gpu.raw_clip_h = (param >> 16) & 0xFFFF;
++        aa_apply();
+         break;
+     case NV097_SET_SURFACE_FORMAT:
+         s_gpu.format = param;
++        aa_apply();
+         break;
+     case NV097_SET_SURFACE_PITCH:
+         s_gpu.pitch = param & 0xFFFF;      /* colour pitch; zeta is the top half */
+@@ -3181,6 +3272,37 @@ void nv2a_pb_exec_method(uint32_t subch, uint32_t method, uint32_t param)
+     case 0x035C: s_gpu.depth_mask = param; break; /* DEPTH_MASK */
+     case 0x0214: s_gpu.zeta_offset = param; break;/* SURFACE_ZETA_OFFSET */
+     case 0x1D8C: s_gpu.zstencil_clear = param; break; /* ZSTENCIL_CLEAR_VALUE */
++    /* GPU-to-CPU fences. Xbox D3D inserts SET_SEMAPHORE_OFFSET +
++     * BACK_END_WRITE_SEMAPHORE_RELEASE after work it will later wait for, and
++     * D3D_BlockOnTime / BlockUntilIdle spin until the value lands in memory.
++     * Executed in stream order, this is an exact completion signal: the value
++     * is written only once everything before it has been carried out, so the
++     * title cannot reuse pushbuffer space the executor has not read yet.
++     * The semaphore context DMA on Xbox D3D spans physical memory from 0,
++     * the same assumption GET_REPORT makes. */
++    case 0x1D6C: s_gpu.sema_offset = param; break;    /* SET_SEMAPHORE_OFFSET */
++    case 0x0180: case 0x0184: case 0x0188: case 0x018C: case 0x0190: case 0x0194:
++    case 0x0198: case 0x019C: case 0x01A0: case 0x01A4: case 0x01A8:
++        s_gpu.ctx_dma[(method - 0x0180) / 4] = param;
++        if (getenv("RECOMP_SEMA_TRACE")) {
++            uint32_t b = 0, l = 0; int ok = dma_object_base(param, &b, &l);
++            fprintf(stderr, "  [GPU] context DMA 0x%04X handle 0x%08X -> %s base 0x%08X limit 0x%08X\n",
++                    method, param, ok ? "found" : "NOT FOUND", b, l);
++        }
++        break;
++    case 0x1D70: {                                    /* BACK_END_WRITE_SEMAPHORE_RELEASE */
++        uint8_t *mem = (uint8_t *)xbox_GetMemoryOffset();
++        uint32_t base = 0, limit = 0, at;
++        /* SET_CONTEXT_DMA_SEMAPHORE is 0x01A4: slot 9. */
++        if (!dma_object_base(s_gpu.ctx_dma[9], &base, &limit))
++            base = 0;
++        at = dma_resolve((base + s_gpu.sema_offset) & 0x0FFFFFFFu);
++        *(volatile uint32_t *)(mem + at) = param;
++        if (s_gpu.sema_releases++ < 4 && getenv("RECOMP_SEMA_TRACE"))
++            fprintf(stderr, "  [GPU] semaphore release 0x%08X at offset 0x%08X -> VA 0x%08X\n",
++                    param, s_gpu.sema_offset, at);
++        break;
++    }
+ 
+     default:
+         if (method >= 0x0260 && method < 0x0280) {         /* ALPHA_ICW(i) */
+diff --git a/src/kernel/nv2a_pb_scan.c b/src/kernel/nv2a_pb_scan.c
+index 65bbedb..cb795df 100644
+--- a/src/kernel/nv2a_pb_scan.c
++++ b/src/kernel/nv2a_pb_scan.c
+@@ -103,7 +103,8 @@ static const struct { uint32_t m; const char *name; } NV097_NAMES[] = {
+     { 0x1D8C, "SET_CLEAR_DEPTH" },
+     { 0x1D90, "SET_COLOR_CLEAR_VALUE" },
+     { 0x1D94, "CLEAR_SURFACE" },
+-    { 0x1D6C, "SET_ZSTENCIL_CLEAR" },
++    { 0x1D6C, "SET_SEMAPHORE_OFFSET" },
++    { 0x1D70, "BACK_END_WRITE_SEMAPHORE_RELEASE" },
+     { 0x0B80, "SET_TRANSFORM_PROGRAM" },
+     { 0x0B00, "SET_TRANSFORM_CONSTANT" },
+     { 0x1720, "SET_VERTEX_DATA_ARRAY_OFFSET" },
+-- 
+2.43.0
+

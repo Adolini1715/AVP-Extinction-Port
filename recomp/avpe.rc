@@ -1,0 +1,2 @@
+/* the app icon (Explorer, the taskbar, the window: SDL takes the exe's first icon) */
+1 ICON "avpe.ico"

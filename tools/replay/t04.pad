@@ -1,0 +1,65 @@
+# T04 replay script (Marine tutorial: Dropship menu, upgrade, CommTech repair, Synthetic + Sentry Gun, Medic heal).
+# Plays the whole tutorial (all 14 goals) by about frame 5920; run 6000 frames. Pad polls, B+n = n polls after the briefing.
+# Model: the cursor sits at the screen centre; LS pans the camera (accelerates, d = 0.0113 t^2 up to 38 polls, then 0.88 per poll);
+# the cursor ground point is (camera x, camera y - 21.4). Timing is deterministic under replay; goals gate on game time, so keep the gaps.
+# close the mission briefing
+B+60 start
+# skip the intro movie
+B+150 a
+# g0 "Select the CommTech Marine": A with the cursor (screen centre) over him
+B+250 a
+# g1 Black opens the Dropship menu
+B+330 black
+# g2 order two Infantry (A = Select) ...
+B+420 a
+B+470 a
+# ... X confirms the order (menu closes)
+B+540 x
+# (g3 is time gated: g4 starts 754 frames after X) select the CommTech again
+B+1000 a
+# g4 Black reopens the menu after the Infantry upgrade got enabled (the menu is built on opening)
+B+1340 black
+# g5 D-pad right focuses the Upgrade button next to Infantry
+B+1410 right
+# A opens the confirm menu (focus starts on No)
+B+1470 a
+# D-pad left focuses Yes
+B+1540 left
+# A buys the upgrade
+B+1600 a
+# g6 Black exits the menu
+B+1670 black
+# g7 select the CommTech
+B+1860 a
+# LS left 22 polls: camera x -5.4 (cursor = camera x, camera y - 21.4)
+B+1900 lleft:22
+# LS up 84 polls: camera y -56 (cursor onto the Atmo at 95.2/21.2)
+B+1940 lup:84
+# B on the damaged Atmo: CommTech walks there and repairs it (g7 area, g8 health 600)
+B+2060 b
+# camera to the Synthetic at 102/69 while he walks
+B+2090 lright:24
+B+2140 ldown:73
+# g9 select the Synthetic (after the Atmo is repaired, he turns friendly)
+B+3360 a
+# camera to the Sentry Gun at 106/69
+B+3440 lright:19
+# g10 B on the Sentry Gun: pick it up
+B+3470 b
+# camera to the Atmo (97/23)
+B+3550 lleft:28
+B+3590 lup:72
+# B: walk there carrying it
+B+3670 b
+# camera to the Medic at 108/90 during the walk
+B+3710 lright:31
+B+3770 ldown:96
+# g11 Black drops the Sentry Gun (inside radius 8 of the Atmo)
+B+4320 black
+# g12 select the Medic
+B+4375 a
+# camera to the Sniper at 103/88
+B+4410 lleft:21
+B+4440 lup:13
+# g13 B on the Sniper: heal (done about frame 5920)
+B+4480 b
