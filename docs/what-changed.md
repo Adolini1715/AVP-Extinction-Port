@@ -284,15 +284,12 @@ Found by playing the public v0.1.0 on the day it went out.
   pan now moves the view by exactly what the ground under the pointer moves.
 - **Updating a GitHub install failed** with "file already exists". The installer could not
   clear the old copy of the decompilation, whose git files Windows marks read-only.
-- **A crash when a logo movie was skipped** on a fast PC: the game could read a movie its
-  worker thread had just closed.
+- **A crash or black screen when skipping the logo movies** on a fast PC: the game could read a
+  movie its worker thread had just closed. Confirmed fixed by play on the PC that hit it.
 - **Session recording is off unless you tick it** in the launcher.
 
 ## Known issues
 
-- Pressing a key in the instant between the last logo and the intro has once left the game on a
-  black screen instead of loading the main menu. It has not been reproduced since. Close the
-  game and start it again; turning Movies off in the launcher avoids it.
 
 - Only the USA retail Xbox release is supported. The installer names the release it found
   and says why it turned a copy down, including the PlayStation 2 disc.
