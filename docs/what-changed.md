@@ -297,7 +297,7 @@ Found by playing the public v0.1.0 on the day it went out.
 - A selection box released over the bottom HUD band, near the Dropship button, calls the
   Dropship. The Xbox game's pointer does the same there; a mouse just reaches that spot far
   more often.
-- The first install takes 20 to 40 minutes, because your PC translates and compiles the game.
+- The first install takes 5 to 15 minutes, because your PC translates and compiles the game.
 - Four finished replacements (the memory allocator's allocate and free, and two for run-time
   type information) are switched off in this release until every one of their paths has been
   checked.

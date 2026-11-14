@@ -2,7 +2,7 @@
 rem Builds AvP: Extinction for PC from your own Xbox copy of the game.
 rem 1. Put your disc image (.iso) or extracted disc folder in "PUT YOUR GAME HERE"
 rem    (the installer reads only that folder).
-rem 2. Double-click this file. The first run takes 20 to 40 minutes and needs the internet.
+rem 2. Double-click this file. The first run takes 5 to 15 minutes and needs the internet.
 rem Everything stays in this folder; when it is done the launcher opens.
 title AvP: Extinction PC installer
 cd /d "%~dp0"

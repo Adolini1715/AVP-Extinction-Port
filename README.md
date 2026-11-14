@@ -45,7 +45,7 @@ The installer builds the game on your PC from your own copy. It downloads the bu
 SHA-256), checks that your `default.xbe` is the release it supports, recompiles it with the
 bundled toolkit (`xboxrecomp/`) and compiles `avpe.exe` with the decompilation
 ([AVP-Extinction-Decomp](https://github.com/Adolini1715/AVP-Extinction-Decomp), fetched at a pinned
-commit). The first run takes 20 to 40 minutes; if it stops, run it again and it carries
+commit). The first run takes 5 to 15 minutes; if it stops, run it again and it carries
 on. If it fails, `install-log.txt` says where.
 
 When it is done the launcher opens. Everything stays in the folder you unzipped: the build tools,
