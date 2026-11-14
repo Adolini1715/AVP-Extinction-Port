@@ -73,8 +73,8 @@ No game code or data is in this repository. You build the port from your own dis
 - Ctrl+A selects everything of yours on screen. Control groups: Ctrl+1 to 4 makes one,
   Shift+Ctrl adds the selection to it, the number selects it, and twice quickly centres the
   camera on it.
-- Right drag moves the map with the mouse, the way StarCraft II and Age of Empires IV do it,
-  smoothed so a slow diagonal drag does not step along the screen's axes.
+- Right drag grabs the map: the ground under the pointer follows your hand, in any direction,
+  at any spot on the screen.
 - Stance and order hotkeys, WASD or screen-edge scrolling, middle drag to turn and tilt the
   camera, and a wheel zoom that moves the same amount at any frame rate.
 - Clicking the minimap moves the camera there, and the HUD's buttons answer the mouse: the
@@ -274,7 +274,25 @@ which is how it was found, and what they are for.
 - **Autosaving on the wall clock.** It made one of the replay checks fail at random, because
   a fast run saved at a different frame than a slow one. Autosave counts game time.
 
+## Changes in v0.1.1
+
+Found by playing the public v0.1.0 on the day it went out.
+
+- **Right drag was inverted up and down.** Left-right grabbed the map and up-down pushed it the
+  other way, so diagonal drags went off along the wrong diagonal. Up-down drags also moved the
+  map only three quarters as far as the hand, because the tilted view was not allowed for. The
+  pan now moves the view by exactly what the ground under the pointer moves.
+- **Updating a GitHub install failed** with "file already exists". The installer could not
+  clear the old copy of the decompilation, whose git files Windows marks read-only.
+- **A crash when a logo movie was skipped** on a fast PC: the game could read a movie its
+  worker thread had just closed.
+- **Session recording is off unless you tick it** in the launcher.
+
 ## Known issues
+
+- Pressing a key in the instant between the last logo and the intro has once left the game on a
+  black screen instead of loading the main menu. It has not been reproduced since. Close the
+  game and start it again; turning Movies off in the launcher avoids it.
 
 - Only the USA retail Xbox release is supported. The installer names the release it found
   and says why it turned a copy down, including the PlayStation 2 disc.

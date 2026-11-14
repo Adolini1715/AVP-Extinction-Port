@@ -34,7 +34,9 @@ Gameplay is the Xbox game's: unit stats, difficulty and the missions are unchang
 You need the **USA retail** Xbox release of the game, as a disc image (`.iso`) or extracted to a
 folder (the one with `default.xbe` in it). The PlayStation 2 release will not work.
 
-1. Download this project (**Code > Download ZIP**, or the release's source zip) and unzip it.
+1. Download this project (**Code > Download ZIP**, or the release's source zip) and unzip it to a
+   folder whose path has no spaces, such as `C:\Games\AvPE` (the build tools cannot work in a
+   path with spaces; the installer stops and says so).
 2. Put your disc image, or your extracted disc folder, in the **`PUT YOUR GAME HERE`** folder.
 3. Double-click **`Install.bat`**. If Windows asks whether to run it, choose Run.
 
@@ -82,7 +84,7 @@ run an `avpe.exe` someone else hands you. See `SECURITY.md`.
 
 ## Status
 
-Version 0.1.0, the first public release. [What this port changes, and what it took](docs/what-changed.md)
+Version 0.1.1 (0.1.0 was the first public release). [What this port changes, and what it took](docs/what-changed.md)
 is the full record: what it adds, what it fixes, how it was built and checked, and what is known
 not to work.
 

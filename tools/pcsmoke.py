@@ -728,6 +728,88 @@ def rightdrag_angles(g):
     check('the view follows the drag direction (within 5 degrees)', worst < 5, 'worst %.1f' % worst)
 
 
+def rightdrag_gain(g):
+    """--level: is the right-drag pan one to one? For a pointer at the top, middle and bottom of
+    the screen, compare how far the ground under the pointer moves when the pointer moves N
+    pixels (no button) with how far the view moves for a right drag of the same N pixels."""
+    if not g.wait(r'replaced with', 400):
+        check('level loads', False); return
+    if not check('briefing up', g.wait(r'\[BRIEFING\] mission goals up \(frame [1-9]', 400, 0)):
+        return
+    m = g.mark(); g.key('Return', 3)
+    g.wait(r'\[BRIEFING\] closed', 60, m)
+    time.sleep(10)
+    m = g.mark(); g.key('Escape', 4)
+    g.wait(r'Esc skips the mission intro', 20, m)
+    time.sleep(6)
+    def cam():
+        m = g.mark(); g.send('cam 0', 0.4)
+        a = g.wait(r'\[PC\] camera at', 5, m).split('camera at ')[1]
+        return tuple(float(v) for v in a.split(' vel ')[0].split(','))
+    def world():
+        m = g.mark(); g.send('where 0', 0.4)
+        a = g.wait(r'\[PC\] pointer at .* world', 5, m)
+        sp = a.split('pointer at ')[1].split(' ')[0]; w = a.split('world ')[1].split(' ')[0]
+        return tuple(float(v) for v in sp.split(',')), tuple(float(v) for v in w.split(','))
+    N = 8
+    for py in (140, 240, 340):
+        for (mx, my) in ((N, 0), (0, N)):
+            for _ in range(3): g.send('pointer 320 %d' % py, 0.4)
+            time.sleep(0.5)
+            s0, w0 = world()
+            for _ in range(5): g.send('move %d %d' % (mx, my), 0.05)
+            time.sleep(0.5)
+            s1, w1 = world()
+            for _ in range(3): g.send('pointer 320 %d' % py, 0.4)
+            time.sleep(0.5)
+            c0 = cam()
+            g.send('mousedown 1', 0.1)
+            for _ in range(5): g.send('move %d %d' % (mx, my), 0.05)
+            g.send('mouseup 1', 0.6)
+            c1 = cam()
+            dw = (w1[0] - w0[0], w1[1] - w0[1]); dc = (c1[0] - c0[0], c1[1] - c0[1])
+            note('pointer y %d move %s: pointer %.0f,%.0f->%.0f,%.0f ground %+.2f,%+.2f  drag view %+.2f,%+.2f  ratio %.2f' % (
+                py, (mx, my), s0[0], s0[1], s1[0], s1[1], dw[0], dw[1], dc[0], dc[1],
+                (dc[0] * -dw[0] + dc[1] * -dw[1]) / max(1e-6, dw[0] ** 2 + dw[1] ** 2)))
+
+
+def rightdrag_circle(g):
+    """--level: a right drag round a circle. The pan steps must point all round the circle too
+    (playtest: 'only 4 directions'): the share of steps within 10 degrees of an axis is reported."""
+    import math
+    if not g.wait(r'replaced with', 400):
+        check('level loads', False); return
+    if not check('briefing up', g.wait(r'\[BRIEFING\] mission goals up \(frame [1-9]', 400, 0)):
+        return
+    m = g.mark(); g.key('Return', 3)
+    g.wait(r'\[BRIEFING\] closed', 60, m)
+    time.sleep(10)
+    m = g.mark(); g.key('Escape', 4)
+    g.wait(r'Esc skips the mission intro', 20, m)
+    time.sleep(6)
+    for _ in range(3): g.send('pointer 320 240', 0.4)
+    R = float(os.environ.get('CIRCLE_R', '3'))
+    m = g.mark()
+    g.send('mousedown 1', 0.1)
+    fx = fy = 0.0
+    for i in range(240):
+        a = 2 * math.pi * i / 120
+        fx += R * math.cos(a); fy += R * math.sin(a)
+        ix, iy = int(fx), int(fy); fx -= ix; fy -= iy
+        if ix or iy: g.send('move %d %d' % (ix, iy), 0.012)
+        else: time.sleep(0.012)
+    g.send('mouseup 1', 0.5)
+    steps = [tuple(float(v) for v in l.split('pan step ')[1].split(' ')[0].split(',')) for l in g.since(m, r'pan step')]
+    steps = [s for s in steps if abs(s[0]) + abs(s[1]) > 1e-3]
+    near = 0; bins = [0] * 12
+    for sx, sy in steps:
+        d = math.degrees(math.atan2(sy, sx)) % 360
+        bins[int(d // 30)] += 1
+        if min(d % 90, 90 - d % 90) < 10: near += 1
+    note('%d pan steps; by 30-degree sector: %s; within 10 degrees of an axis: %.0f%% (even spread: 22%%)' % (len(steps), bins, 100.0 * near / max(1, len(steps))))
+    check('pan steps point all round', len(steps) > 50 and min(bins) > 0 and near < 0.45 * len(steps), str(bins))
+
+
 def rightdrag_jitter(g):
     """--level, AVPE_PC_PANLOG=1: a slow shallow diagonal right-drag sent as whole mouse counts,
     the way a real mouse reports one; the per-frame pan steps must keep one direction."""
@@ -919,6 +1001,44 @@ def movieskip(g):
     shot('after-movies')
 
 
+def moviemash(g):
+    """AVPE_MOVIES=1: space tapped over and over through the logos and the intro (playtest: the
+    game froze). The title must come up and frames must keep coming."""
+    m = g.mark()
+    if not g.wait(r'\[MOVIE\] .*: \d+x\d+', 120):
+        check('a movie starts', False, 'no [MOVIE] line (movies off?)')
+        return
+    t0 = time.time()
+    while time.time() - t0 < 25:
+        g.key('space', 0.08)
+        time.sleep(0.12)
+    note('movie lines: ' + ' / '.join(l.strip() for l in g.since(m, r'\[MOVIE\]'))[:1200])
+    f0 = g.last_frame; time.sleep(8)
+    check('frames keep coming after the mashing', g.last_frame > f0 + 30, '%d -> %d' % (f0, g.last_frame))
+    l = g.wait(r'^\[MENU\] focus', 60, m)
+    check('the title or menu comes up', bool(l), g.focus())
+    shot('after-mash')
+
+
+def moviestall(g):
+    """AVPE_MOVIES=1: the playtest freeze. The logos play for a while, then space is tapped as
+    the intro starts. The main menu must load (a hang here sat on a black screen for good)."""
+    m = g.mark()
+    if not g.wait(r'\[MOVIE\] .*Zono.*: \d+x\d+', 120):
+        check('the logos start', False); return
+    time.sleep(1.0)
+    g.key('space', 0.08)
+    gap = float(os.environ.get('GAP', '-1'))
+    if gap >= 0:                                    # a second press in the gap between the Zono logo and the intro
+        time.sleep(gap); g.key('space', 0.08)
+    if not g.wait(r'\[MOVIE\] .*Intro.*: \d+x\d+', 60, m):
+        check('the intro starts', False); return
+    for _ in range(4):
+        g.key('space', 0.06); time.sleep(0.05)
+    note('movie lines: ' + ' / '.join(l.strip() for l in g.since(m, r'\[MOVIE\]|SOAK\] hitch'))[:1500])
+    check('the main menu loads', bool(g.wait(r"\[LEVEL\] load #2 'mainmenu", 40, m)))
+
+
 def keylist(g):
     """Main menu > Options > Controls with the keyboard: one scrolling page of every key, then Reset."""
     if not boot(g):
@@ -1089,7 +1209,7 @@ def autosave(g):
 
 g = Game()
 try:
-    {'front': front, 'menus': menus, 'zoom': zoom, 'wheel': wheel, 'wheel2': wheel2, 'levelwheel': levelwheel, 'audit': audit, 'brief': brief, 'hudprobe': hudprobe, 'hudclick': hudclick, 'uplink': uplink, 'quicksave': quicksave, 'autosave': autosave, 'dragbox': dragbox, 'groups': groups, 'pausekeys': pausekeys, 'frontcontrols': frontcontrols, 'quitgame': quitgame, 'pcsettings': pcsettings, 'movieskip': movieskip, 'keylist': keylist, 'padmouse': padmouse, 'wasd': wasd, 'holdleft': holdleft, 'rightdrag': rightdrag, 'rightdrag_angles': rightdrag_angles, 'rightdrag_jitter': rightdrag_jitter}[args.script](g)
+    {'front': front, 'menus': menus, 'zoom': zoom, 'wheel': wheel, 'wheel2': wheel2, 'levelwheel': levelwheel, 'audit': audit, 'brief': brief, 'hudprobe': hudprobe, 'hudclick': hudclick, 'uplink': uplink, 'quicksave': quicksave, 'autosave': autosave, 'dragbox': dragbox, 'groups': groups, 'pausekeys': pausekeys, 'frontcontrols': frontcontrols, 'quitgame': quitgame, 'pcsettings': pcsettings, 'movieskip': movieskip, 'keylist': keylist, 'padmouse': padmouse, 'wasd': wasd, 'holdleft': holdleft, 'rightdrag': rightdrag, 'rightdrag_angles': rightdrag_angles, 'rightdrag_jitter': rightdrag_jitter, 'rightdrag_gain': rightdrag_gain, 'moviemash': moviemash, 'moviestall': moviestall, 'rightdrag_circle': rightdrag_circle}[args.script](g)
     if args.script != 'quitgame':
         check('no crash', g.alive(), 'exit %s' % g.p.poll())
     check('frames advancing', time.time() - g.last_frame_t < 60, 'last frame %d' % g.last_frame)

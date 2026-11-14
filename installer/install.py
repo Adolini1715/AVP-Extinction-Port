@@ -69,7 +69,7 @@ SKIP_FILES = {"cerbera.tvr"}                                     # 200 MB of dis
 URL = os.environ.get("AVPE_REPO_URL", "https://github.com/Adolini1715/AVP-Extinction-Port")
 DECOMP_URL = os.environ.get("AVPE_DECOMP_URL", "https://github.com/Adolini1715/AVP-Extinction-Decomp")
 XR_REV = os.environ.get("AVPE_XR_REV", "6874c242e6d7c1ddfc50e01b3598b40bda3518d9")          # toolkit-fork
-DECOMP_REV = os.environ.get("AVPE_DECOMP_REV", "eb27219c078911c51cb81c41dd633bcadeca1f73")  # AVP-Extinction-Decomp main
+DECOMP_REV = os.environ.get("AVPE_DECOMP_REV", "e899f70018f8d0f5b40bb7042fa60ee02111bc07")  # AVP-Extinction-Decomp main
 _rev = os.path.join(REPO, "avpe-decomp", "REVISION")              # an offline copy records its commit
 if os.path.isfile(_rev) and "AVPE_DECOMP_REV" not in os.environ:
     DECOMP_REV = open(_rev).read().strip()
@@ -123,6 +123,22 @@ def scrub(text):
     for v, tag in PRIVATE:
         text = re.sub(re.escape(v), tag, text, flags=re.I)
     return text
+
+
+def rmtree(path):
+    """remove a folder, read-only files included (a git checkout's objects are read-only on
+    Windows, and shutil.rmtree(ignore_errors=True) silently leaves them: the copy that follows
+    then failed with 'file already exists' when a package was dropped on a GitHub install)"""
+    def clear(func, p, _exc):
+        try:
+            os.chmod(p, 0o700)
+            func(p)
+        except OSError:
+            pass
+    if os.path.lexists(path):
+        shutil.rmtree(path, onerror=clear)
+    if os.path.lexists(path):
+        fail(f"could not remove {os.path.basename(path)} in the build folder. Close anything using it and run again.")
 
 
 def say(msg=""):
@@ -517,7 +533,7 @@ def lift(py, xr, avpe, decomp, xbe, gen, work, env):
     with open(manual, "wb") as f:
         f.write(scan)
     say("  translating to C")
-    shutil.rmtree(gen, ignore_errors=True)
+    rmtree(gen)
     run([py, "-m", "tools.recomp", xbe, "--all", "--split", "250", "--gen-dir", gen, "--exclude-manual", manual,
          "--manual-functions", os.path.join(avpe, "recomp", "manual_functions.json")], cwd=xr, env=env, quiet=True)
 
@@ -632,12 +648,12 @@ def main():
         t = download("sdl2", dl)
         with tarfile.open(t) as tf:
             tf.extractall(dl, filter="data")
-        shutil.rmtree(sdl, ignore_errors=True)
+        rmtree(sdl)
         shutil.copytree(os.path.join(dl, f"SDL2-{SDL_VER}", "x86_64-w64-mingw32"), sdl, copy_function=cp)
     ff = os.path.join(deps, "ffmpeg")
     if not os.path.isfile(os.path.join(ff, "lib", "libavcodec.dll.a")):
         z = download("ffmpeg", dl)
-        shutil.rmtree(ff, ignore_errors=True)
+        rmtree(ff)
         unzip(z, ff)
     gitenv = dict(git_env(root), PATH=env["PATH"])
 
@@ -646,7 +662,7 @@ def main():
     local_xr = os.path.join(REPO, "xboxrecomp")       # an offline copy next to Install.bat wins
     if os.path.isdir(os.path.join(local_xr, "tools")):
         say("  using the recompiler toolkit in the xboxrecomp folder")
-        shutil.rmtree(xr, ignore_errors=True)
+        rmtree(xr)
         shutil.copytree(local_xr, xr, ignore=shutil.ignore_patterns(".git"))
     else:
         fetch_commit(git, gitenv, URL, XR_REV, xr)
@@ -654,7 +670,7 @@ def main():
     local = os.path.join(REPO, "avpe-decomp")       # an offline copy next to Install.bat wins
     if os.path.isdir(os.path.join(local, "platform")):
         say("  using the decompilation in the avpe-decomp folder")
-        shutil.rmtree(decomp, ignore_errors=True)
+        rmtree(decomp)
         shutil.copytree(local, decomp, ignore=shutil.ignore_patterns(".git"))
     else:
         fetch_commit(git, gitenv, DECOMP_URL, DECOMP_REV, decomp)
