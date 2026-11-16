@@ -14,5 +14,8 @@ port, with these exceptions:
 No game data (art, audio, video, levels) is in this repository. Building the port needs your own
 copy of Aliens versus Predator: Extinction.
 
-Aliens versus Predator, Alien and Predator are trademarks of their respective owners. This project
-is not affiliated with or endorsed by them, Electronic Arts or Zono.
+Aliens versus Predator: Extinction is © 2003 its original rights holders: developed by Zono,
+published by Electronic Arts, licensed from Twentieth Century Fox (Fox Interactive). All rights
+to the game, its code, art, audio and names belong to them. Aliens versus Predator, Alien and
+Predator are trademarks of their respective owners. This is an unofficial fan project, not
+affiliated with or endorsed by any of them.

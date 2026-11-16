@@ -1,5 +1,10 @@
 # Aliens versus Predator: Extinction, PC port
 
+> **Unofficial fan project.** Aliens versus Predator: Extinction is © 2003 its original rights
+> holders: developed by Zono, published by Electronic Arts, licensed from Twentieth Century Fox
+> (Fox Interactive). All rights to the game belong to them. This project is not affiliated with
+> or endorsed by them, and includes no game data: you need your own copy of the game.
+
 A native PC port of **Aliens versus Predator: Extinction** (Zono, 2003, original Xbox), made by
 static recompilation: the game's Xbox program is translated to C and compiled for x86-64, with
 parts of it replaced by decompiled and modified C++.
