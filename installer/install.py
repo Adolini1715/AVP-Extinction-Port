@@ -69,7 +69,7 @@ SKIP_FILES = {"cerbera.tvr"}                                     # 200 MB of dis
 URL = os.environ.get("AVPE_REPO_URL", "https://github.com/Adolini1715/AVP-Extinction-Port")
 DECOMP_URL = os.environ.get("AVPE_DECOMP_URL", "https://github.com/Adolini1715/AVP-Extinction-Decomp")
 XR_REV = os.environ.get("AVPE_XR_REV", "6874c242e6d7c1ddfc50e01b3598b40bda3518d9")          # toolkit-fork
-DECOMP_REV = os.environ.get("AVPE_DECOMP_REV", "e899f70018f8d0f5b40bb7042fa60ee02111bc07")  # AVP-Extinction-Decomp main
+DECOMP_REV = os.environ.get("AVPE_DECOMP_REV", "3ec4bdd0862334212e2357e63344cfe94b4c0784")  # AVP-Extinction-Decomp main
 _rev = os.path.join(REPO, "avpe-decomp", "REVISION")              # an offline copy records its commit
 if os.path.isfile(_rev) and "AVPE_DECOMP_REV" not in os.environ:
     DECOMP_REV = open(_rev).read().strip()

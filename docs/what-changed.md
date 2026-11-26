@@ -288,6 +288,19 @@ Found by playing the public v0.1.0 on the day it went out.
   movie its worker thread had just closed. Confirmed fixed by play on the PC that hit it.
 - **Session recording is off unless you tick it** in the launcher.
 
+## Changes in v0.1.2
+
+- **Alt or Shift pressed or let go in the middle of a click.** One click could be split between
+  the mouse and the controller emulation the PC layer uses for Alt and Shift clicks, so the game
+  could miss the release (issue #2: the group drag stuck). A click now stays on the route it
+  started on until the button comes up. We could not reproduce the reported case on our test
+  machine, so if it still happens, tell us on issue #2.
+- **Pathfinding: Experimental** (launcher, off by default). Units search better routes (diagonal
+  steps cost what they should, so routes are no longer up to about 41% longer and no longer hug
+  obstacles) and groupmates whose bodies overlap no longer lock each other in place, the
+  "caught behind when grouped" report. Checked in scripted runs only: tell us how it plays.
+  With it off the game plays exactly as v0.1.1 (the same scripted mission run, frame for frame).
+
 ## Known issues
 
 

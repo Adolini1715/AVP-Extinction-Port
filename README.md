@@ -89,7 +89,7 @@ run an `avpe.exe` someone else hands you. See `SECURITY.md`.
 
 ## Status
 
-Version 0.1.1 (0.1.0 was the first public release). [What this port changes, and what it took](docs/what-changed.md)
+Version 0.1.2 (0.1.0 was the first public release). [What this port changes, and what it took](docs/what-changed.md)
 is the full record: what it adds, what it fixes, how it was built and checked, and what is known
 not to work.
 
